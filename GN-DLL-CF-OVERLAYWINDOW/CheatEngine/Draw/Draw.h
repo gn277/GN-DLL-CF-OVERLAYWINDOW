@@ -37,6 +37,7 @@ struct _Direct11
 class Draw
 {
 private:
+	HWND game_window_handle = 0;							//сно╥╢╟©з╬Д╠З
 	HINSTANCE overlay_window_hinstance = 0;
 	HWND overlay_window_handle = 0;
 	_Direct9 direct9 = { nullptr };
