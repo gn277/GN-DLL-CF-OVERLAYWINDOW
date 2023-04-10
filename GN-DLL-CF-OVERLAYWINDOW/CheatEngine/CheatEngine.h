@@ -10,11 +10,12 @@
 class CheatEngine :public Draw, public Game, public MemoryTools, public Tools,public CheatEngineApi
 {
 private:
+	HMODULE self_module_handle = NULL;
 
 public:
 
 public:
-	CheatEngine();
+	CheatEngine(HINSTANCE hinstance);
 	~CheatEngine();
 	void Rendering();
 

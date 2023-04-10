@@ -1,13 +1,13 @@
 #include "DllMain.h"
 
-HMODULE g_self_module_handle = NULL;
 CheatEngine* ce = nullptr;
 
 
 void CheatEngineInit(HINSTANCE hinstance)
 {
-    g_self_module_handle = hinstance;
-
+    ce = new CheatEngine(hinstance);
+    ce->Rendering();
+    delete ce;
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)

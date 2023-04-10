@@ -1,8 +1,9 @@
 #include "CheatEngine.h"
 
 
-CheatEngine::CheatEngine()
+CheatEngine::CheatEngine(HINSTANCE hinstance)
 {
+	this->self_module_handle = hinstance;
 
 }
 
