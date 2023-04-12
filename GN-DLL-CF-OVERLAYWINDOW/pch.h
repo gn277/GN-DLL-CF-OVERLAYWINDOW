@@ -14,18 +14,12 @@
 #include <winnls.h>
 #include <tlhelp32.h>
 #include <winsock.h>
-#include <d3d9.h>
-#include <d3dx9.h>
 
 #pragma comment(lib,"dwmapi.lib")
 #pragma comment(lib,"ws2_32.lib")
 #pragma comment(lib,"ComCtl32.lib")
-//Direct
-#pragma comment(lib,"d3d9.lib")
-#pragma comment(lib,"d3dx9.lib")
 #pragma comment(lib,"dwrite.lib")
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "d3dx11.lib")
+
 #pragma warning (disable:4244)
 #pragma warning( disable : 4996 )
 

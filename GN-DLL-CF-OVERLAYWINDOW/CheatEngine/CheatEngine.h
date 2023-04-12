@@ -7,7 +7,7 @@
 #include "CheatEngineApi/CheatEngineApi.h"
 
 
-class CheatEngine :public Draw, public Game, public MemoryTools, public Tools,public CheatEngineApi
+class CheatEngine :public Game, public Draw, public MemoryTools, public Tools, public CheatEngineApi
 {
 private:
 	HMODULE self_module_handle = NULL;

@@ -3,7 +3,6 @@
 
 CheatEngineApi::CheatEngineApi()
 {
-	OutputDebugStringA_1Param("[GN]:%s->", __FUNCTION__);
 	//Load Modulehandle
 	user32dll = LoadLibraryA("user32.dll");
 	kernel32dll = LoadLibraryA("KERNEL32.dll");

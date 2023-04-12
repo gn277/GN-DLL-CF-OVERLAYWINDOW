@@ -1,16 +1,21 @@
 #pragma once
 #include "../../pch.h"
 #include <dwmapi.h>
+//direct
+#include <d3d9.h>
+#pragma comment(lib,"d3d9.lib")
 #include <d3dx9.h>
+#pragma comment(lib,"d3dx9.lib")
 #include <d3d11.h>
-
+#pragma comment(lib,"d3d11.lib")
+#include <d3dx11.h>
+#pragma comment(lib, "d3dx11.lib")
+//ImGUi
 #include "../../lmGui/imgui.h"
 #include "../../lmGui/imgui_impl_dx11.h"
 #include "../../lmGui/imgui_impl_win32.h"
 
-#pragma comment(lib, "dwmapi.lib")
-#pragma comment(lib,"d3dx9.lib")
-#pragma comment(lib,"d3d11.lib")
+#include "../Tools/Tools.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -34,10 +39,10 @@ struct _Direct11
 };
 
 
-class Draw
+class Draw :public Tools
 {
 private:
-	HWND game_window_handle = 0;							//ÓÎÏ·´°¿Ú¾ä±ú
+	HWND game_window_handle = NULL;							//ÓÎÏ·´°¿Ú¾ä±ú
 	HINSTANCE overlay_window_hinstance = 0;
 	HWND overlay_window_handle = 0;
 	_Direct9 direct9 = { nullptr };
@@ -47,6 +52,7 @@ public:
 	HWND GetGameWindowHandle() { return game_window_handle; }
 	void SetOverlayWindowHinstance(HINSTANCE hinstance) { overlay_window_hinstance = hinstance; }
 	void SetGameWindowHandle(HWND hand) { game_window_handle = hand; }
+	void SetOverlayWindowHandle(HWND hand) { overlay_window_handle = hand; }
 	HWND GetOverlayWindowHandle() { return overlay_window_handle; }
 	IDirect3DDevice9* GetD3D9Device() { return direct9.device; }
 	ID3D11Device* GetD3D11Device() { return direct11.pd3d11device; }
@@ -88,6 +94,12 @@ public:
 	void EndDirect11();
 	void GetGameWindowRect();
 	void SetImGuiMouse();
+	void FillRectangle(float Left, float Top, float Width, float Height, float R, float G, float B, float A);
+	void DrawCrossHair(RECT rect, float width, D3DCOLOR color);
+	void DrawAntenna(RECT rect, int objx, int objy, int objw, int objh, D3DCOLOR color, float width);
+	void DrawPreviewRay(RECT rect, int objx, int objy, int objw, int objh, bool side, D3DCOLOR color, float width);
+	void DrawTrackRange(RECT rect, int range, D3DCOLOR color, float width);
+	void MenuDraw();
 
 };
 

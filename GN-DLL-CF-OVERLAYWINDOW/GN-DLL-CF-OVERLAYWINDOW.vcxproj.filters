@@ -95,6 +95,9 @@
     <ClInclude Include="lmGui\imstb_truetype.h">
       <Filter>ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="CheatEngine\Tools\xorstr.h">
+      <Filter>CheatEngine\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain\DllMain.cpp">

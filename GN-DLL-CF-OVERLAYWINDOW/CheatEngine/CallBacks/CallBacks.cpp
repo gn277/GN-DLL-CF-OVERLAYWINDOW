@@ -11,6 +11,7 @@ LRESULT CALLBACK Draw::OverlayWindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPA
 	{
 	case WM_SIZE:
 	{
+		OutputDebugStringA("[GN]:WM_SIZE");
 		if (ce->Draw::GetD3D11Device() != NULL && wParam != SIZE_MINIMIZED)
 		{
 			ce->Draw::CleanupRenderTarget();
