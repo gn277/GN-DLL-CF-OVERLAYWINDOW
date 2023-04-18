@@ -1,5 +1,12 @@
 #pragma once
 #include "../../pch.h"
+
+#include <d3d9.h>
+#pragma comment(lib,"d3d9.lib")
+#include <d3dx9.h>
+#pragma comment(lib,"d3dx9.lib")
+
+#include "Update/Update.h"
 #include "DataStruct.h"
 #include "../MemoryTools/MemoryTools.h"
 
@@ -67,6 +74,53 @@ public:
 public:
 	Game();
 	~Game();
+	//void GetDriver(Driver* drv) { driver = drv; }						//获取驱动
+	void BaseAddressInit();												//基址初始化
+	void ByPassACE();													//处理ACE
+	void ACE_Base();
+	void ACE_ATS();
+	void ACE_CSI();
+	void PassErrorCode();
+	BOOL WorldToScreen2(m_D3DCoordinate view_, D3DXVECTOR2* RetCoordinates);
+	BOOL WorldToScreen(m_D3DCoordinate EnemyCoordinates, m_D3DCoordinate* RetCoordinates);
+	bool IsInGaming();
+	int GetSelfPosition();
+	int GetCharacterNumber();
+	void GetSelfData(m_D3DCoordinate* RetData);
+	bool GetEnemyCoordinate(__int64 id, m_D3DCoordinate* b);
+	bool GetBiochemicalModel(int SelfPosition, int PlayerPosition);
+	__int64 GetSelfLive();
+	char* GetEnemyName(__int64 id);
+	bool GetEnemyLive(__int64 id);
+	int GetUserQQNumber(int id);
+	__int64 GetCharacterBlood(__int64 id);
+	bool IsC4(int id);
+	int GetCurrentWeaponID();
+	LPCSTR JudgeMentMap();
+	void TrackingRange(m_D3DCoordinate Data, int Target, int gamewidth, int gameheight);
+	int CalulateEnemyDistance(m_D3DCoordinate self_coordinate, m_D3DCoordinate enemy_coordinate);
+	void CalculateDistance(m_D3DCoordinate ScreenCoordinates, __int64 EnemyID, __int64 BoneID, int gamecent_x, int gamecent_y);
+	BOOL IsVisible(m_D3DCoordinate SelfPos, m_D3DCoordinate TargetPos);
+	void MouseAimbot(m_D3DCoordinate Output, int gamecent_x, int gamecent_y, int gamewidth, int gameheight);
+	m_D3DCoordinate AutomaticAimingAlgorithm(m_D3DCoordinate EnemyCoordinates);
+	m_D3DCoordinate VectorToRotation(m_D3DCoordinate SelfCoordinates, m_D3DCoordinate b);
+	int RandomPosition();
+	void ModifyTrajectory();
+	void ReductionTrajectory();
+	void TrackDeployment(m_D3DCoordinate AimCoordinates);
+	bool GetBoneCoordinate(__int64 ID, m_D3DCoordinate* Deposit, __int64 Position);
+	void DrawBone(int Addr, int color, int LineSize);
+	void WriteSilenceTrack(m_D3DCoordinate aim_coordinates);
+
+	void UnlimitedPaintingSwitch();
+	bool ChangeKnifeDistance(float KnifeWieldingDistance, float TapSpeed, float HitSpeed, float TapRange, float HitRange);
+	bool ReductionKnifeDistance();
+	void TeleportToTrackTheEnemyFunc(DWORD id);
+	void SpaceContinuousJumpFunc();
+	bool TraversingBinaryTree(__int64 object, std::vector<__int64>* pvector);
+	void TraverseMonsterArray();
+	void SendSecKillPacket(std::vector<__int64>* pmonster_list);
+	void SendPacket();
 
 };
 

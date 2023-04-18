@@ -431,3 +431,365 @@ void Draw::MenuDraw()
 	}
 }
 
+void Draw::MainFuncDraw()
+{
+	int PeopleNumbers = 0, Police = 0, Position = 0;
+	ce->Game::m_recentdistance = 0;
+	ce->Game::m_locking_pawn = 0;
+	if (this->Draw::show_crosshair)
+		this->Draw::DrawCrossHair(this->Draw::clientrect, 1, this->Draw::draw_color);
+	if (this->Draw::show_trackrange)
+		this->Draw::DrawTrackRange(this->Draw::clientrect, ce->Game::track_range, this->Draw::draw_color, 2);
+	if (ce->Game::IsInGaming())
+	{
+		bool Enemy = FALSE;
+		ScreenCoordinates DrawCoordinates[31] = { NULL };							//ª≠≥ˆ◊¯±Í
+		m_D3DCoordinate Coordinates = { NULL }, Sole = { NULL }, Head = { NULL };	//OBJ_◊¯±Í Ω≈÷· Õ∑÷·
+		m_D3DCoordinate EnemyCoordinates = { NULL }, RetCoordinates = { NULL };		//µ–»À◊¯±Í  ∑µªÿ◊¯±Í
+		m_D3DCoordinate DepositCoordinates = { NULL }, TrackCoordinates = { NULL }, AiMBotCoordinates = { NULL };
+		Position = ce->Game::GetSelfPosition();
+		PeopleNumbers = ce->Game::GetCharacterNumber();
+		Police = (Position <= 8) ? 0 : 1;
+		ce->Game::GetSelfData(&RetCoordinates);
+		for (int i = 0; i <= 31; i++)
+		{
+			if (i == Position)
+			{
+				Enemy = FALSE;
+				continue;
+			}
+			if (PeopleNumbers == 8)
+			{
+				if (this->Draw::show_teamate)//œ‘ æ∂””—
+					Enemy = TRUE;
+				else
+					Enemy = (Police == 1 ? (i + 1) - Police <= 8 : (i + 1) - Police > 9);
+			}
+			if (PeopleNumbers >= 16)
+				Enemy = TRUE;
+			if (PeopleNumbers == 30)
+			{
+				if (this->Draw::show_teamate)//œ‘ æ∂””—
+					Enemy = TRUE;
+				else
+					Enemy = ce->Game::GetBiochemicalModel(Position, i);
+			}
+			if (Enemy)
+			{
+				if (i != Position)
+				{
+					if (ce->Game::GetEnemyLive(i))
+					{
+						__int64 Distance = 0;
+						char BloodVolumeText[15] = { NULL };//—™¡øŒƒ±æ
+						char NicknameText[40] = { NULL };//Í«≥∆Œƒ±æ
+						char UserQQNumberText[50] = { NULL };//ø€ø€Œƒ±æ
+						if (ce->Game::GetBoneCoordinate(i, &Coordinates, 0))
+						{
+							Coordinates.z = Coordinates.z - 140;
+							if (ce->Game::WorldToScreen(Coordinates, &Sole))
+							{
+								if (ce->Game::GetBoneCoordinate(i, &Coordinates, 6))
+								{
+									Coordinates.z = Coordinates.z + 37;
+									if (ce->Game::WorldToScreen(Coordinates, &Head))
+									{
+										DrawCoordinates[i].H = Sole.y - Head.y;
+										DrawCoordinates[i].W = DrawCoordinates[i].H / 2;
+										DrawCoordinates[i].X = Head.x - DrawCoordinates[i].H / 4;
+										DrawCoordinates[i].Y = Head.y;
+										if (ce->Game::track || ce->Game::aimbot || ce->Game::silence_track)
+										{
+											if ((bool)ce->Game::aim_position)
+											{
+												ce->Game::GetBoneCoordinate(i, &DepositCoordinates, 6);
+												ce->Game::WorldToScreen(DepositCoordinates, &TrackCoordinates);
+												ce->Game::CalculateDistance(TrackCoordinates, i, 6, this->Draw::gamecent_x, this->Draw::gamecent_y);
+												ce->Game::GetBoneCoordinate(i, &DepositCoordinates, 5);
+												ce->Game::WorldToScreen(DepositCoordinates, &TrackCoordinates);
+												ce->Game::CalculateDistance(TrackCoordinates, i, 5, this->Draw::gamecent_x, this->Draw::gamecent_y);
+											}
+											else
+											{
+												ce->Game::GetBoneCoordinate(i, &DepositCoordinates, 3);
+												ce->Game::WorldToScreen(DepositCoordinates, &TrackCoordinates);
+												ce->Game::CalculateDistance(TrackCoordinates, i, 3, this->Draw::gamecent_x, this->Draw::gamecent_y);
+												ce->Game::GetBoneCoordinate(i, &DepositCoordinates, 4);
+												ce->Game::WorldToScreen(DepositCoordinates, &TrackCoordinates);
+												ce->Game::CalculateDistance(TrackCoordinates, i, 4, this->Draw::gamecent_x, this->Draw::gamecent_y);
+											}
+										}
+										if (ce->Game::redname_track)
+											ce->Game::TrackingRange(Head, i, this->Draw::gamewidth, this->Draw::gameheight);
+										if (ce->show_rectbox)
+											ImGui::GetBackgroundDrawList()->AddRect(ImVec2(DrawCoordinates[i].X, DrawCoordinates[i].Y), ImVec2(DrawCoordinates[i].X + DrawCoordinates[i].W, DrawCoordinates[i].Y + DrawCoordinates[i].H), this->Draw::draw_color, 0.0f, 0, 1.0f);
+										if (ce->show_name)
+										{
+											sprintf_s(NicknameText, "Í«≥∆£∫%s", ce->Game::GetEnemyName(i));
+											this->Draw::FillRectangle(DrawCoordinates[i].X, DrawCoordinates[i].Y - 20, 96, 17, 100, 100, 100, 100); //±≥æ∞øÚ
+											const ImVec2 text_pos = ImVec2(DrawCoordinates[i].X, DrawCoordinates[i].Y - 20);
+											ImGui::GetBackgroundDrawList()->AddText(text_pos, this->Draw::draw_color, ce->Tools::string_to_utf8(NicknameText).c_str());
+										}
+										if (ce->show_userQQnumber)
+										{
+											sprintf_s(UserQQNumberText, u8"QQ£∫%d", ce->Game::GetUserQQNumber(i));
+											this->Draw::FillRectangle(DrawCoordinates[i].X, DrawCoordinates[i].Y - 37, 96, 17, 100, 100, 100, 100); //±≥æ∞øÚ
+											const ImVec2 text_pos = ImVec2(DrawCoordinates[i].X, DrawCoordinates[i].Y - 37);
+											ImGui::GetBackgroundDrawList()->AddText((text_pos), this->Draw::draw_color, UserQQNumberText);
+										}
+										if (this->Draw::show_health)
+										{
+											sprintf_s(BloodVolumeText, u8"—™¡ø£∫%d", ce->Game::GetCharacterBlood(i));
+											const ImVec2 text_pos = ImVec2(DrawCoordinates[i].X, DrawCoordinates[i].Y - 51);
+											ImGui::GetBackgroundDrawList()->AddText(text_pos, this->Draw::draw_color, BloodVolumeText);
+										}
+										if (ce->show_c4)
+										{
+											if (ce->Game::IsC4(i) == TRUE)
+											{
+												const ImVec2 text_pos = ImVec2(DrawCoordinates[i].X, DrawCoordinates[i].Y - 65);
+												ImGui::GetBackgroundDrawList()->AddText((text_pos), this->Draw::draw_color, u8"!!!C4!!!");
+											}
+										}
+										if (this->Draw::show_bone)
+											ce->Game::DrawBone(i, this->Draw::draw_color, 1);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if (this->Draw::show_previewray)
+			this->Draw::DrawPreviewRay(ce->clientrect, DrawCoordinates[ce->Game::m_locking_pawn].X, DrawCoordinates[ce->Game::m_locking_pawn].Y, DrawCoordinates[ce->Game::m_locking_pawn].X + DrawCoordinates[ce->Game::m_locking_pawn].W, DrawCoordinates[ce->Game::m_locking_pawn].Y + DrawCoordinates[ce->Game::m_locking_pawn].H, ce->Game::aim_position, D3DCOLOR_RGBA(255, 0, 0, 255), 2);
+		if (ce->Game::aimbot)
+		{
+			if (ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_LEFT && GetAsyncKeyState(VK_LBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_RIGHT && GetAsyncKeyState(VK_RBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_KEYBOARD_ALT && GetAsyncKeyState(18) != 0)
+			{
+				if (ce->Game::m_locking_pawn != 0)
+				{
+					if (ce->Game::GetEnemyLive(ce->Game::m_locking_pawn) == FALSE)
+						ce->Game::m_locking_pawn = 0;
+					else
+					{
+						if (ce->Game::judgementbarrier)
+						{
+							ce->Game::GetBoneCoordinate(ce->Game::m_locking_pawn, &AiMBotCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+							if (ce->Game::IsVisible(RetCoordinates, AiMBotCoordinates))
+								ce->Game::MouseAimbot(ce->Game::AutomaticAimingAlgorithm(AiMBotCoordinates), this->Draw::gamecent_x, this->Draw::gamecent_y, this->Draw::gamewidth, this->Draw::gameheight);
+						}
+						else
+						{
+							ce->Game::GetBoneCoordinate(ce->Game::m_locking_pawn, &AiMBotCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+							ce->Game::MouseAimbot(ce->Game::AutomaticAimingAlgorithm(AiMBotCoordinates), this->Draw::gamecent_x, this->Draw::gamecent_y, this->Draw::gamewidth, this->Draw::gameheight);
+						}
+					}
+				}
+			}
+		}
+		if (ce->Game::track && ce->Game::m_recentdistance <= ce->Game::track_range)
+		{
+			if (ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_LEFT && GetAsyncKeyState(VK_LBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_RIGHT && GetAsyncKeyState(VK_RBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_KEYBOARD_ALT && GetAsyncKeyState(18) != 0)
+			{
+				if (ce->Game::m_locking_pawn != 0)
+				{
+					if (ce->Game::GetEnemyLive(ce->Game::m_locking_pawn))
+					{
+						if (ce->Game::judgementbarrier)
+						{
+							ce->Game::ModifyTrajectory();
+							ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+							if (ce->Game::IsVisible(RetCoordinates, EnemyCoordinates))//’œ∞≠≈–∂œ
+								ce->Game::TrackDeployment(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
+							else
+							{
+								ce->Game::ReductionTrajectory();
+								ce->Game::m_locking_pawn = 0;
+							}
+						}
+						else
+						{
+							ce->Game::ModifyTrajectory();
+							ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+							ce->Game::TrackDeployment(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
+						}
+					}
+					else
+					{
+						ce->Game::ReductionTrajectory();
+						ce->Game::m_locking_pawn = 0;
+					}
+				}
+			}
+			else
+			{
+				ce->Game::ReductionTrajectory();
+				ce->Game::m_locking_pawn = 0;
+			}
+		}
+		if (ce->Game::silence_track && ce->Game::m_recentdistance <= ce->Game::track_range)
+		{
+			if (ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_LEFT && GetAsyncKeyState(VK_LBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_RIGHT && GetAsyncKeyState(VK_RBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_KEYBOARD_ALT && GetAsyncKeyState(18) != 0)
+			{
+				if (ce->Game::m_locking_pawn != 0)
+				{
+					if (ce->Game::GetEnemyLive(ce->Game::m_locking_pawn))
+					{
+						if (ce->Game::judgementbarrier)
+						{
+							ce->Game::silence_track_switch = true;
+							ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+							if (ce->Game::IsVisible(RetCoordinates, EnemyCoordinates))//’œ∞≠≈–∂œ
+								ce->Game::WriteSilenceTrack(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
+							else
+							{
+								ce->Game::silence_track_switch = false;
+								ce->Game::m_locking_pawn = 0;
+							}
+						}
+						else
+						{
+							ce->Game::silence_track_switch = true;
+							ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+							ce->Game::WriteSilenceTrack(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
+						}
+					}
+					else
+					{
+						ce->Game::silence_track_switch = false;
+						ce->Game::m_locking_pawn = 0;
+					}
+				}
+			}
+			else
+			{
+				ce->Game::silence_track_switch = false;
+				ce->Game::m_locking_pawn = 0;
+			}
+		}
+		ce->CheatEngine::Game::SpaceContinuousJumpFunc();
+		//////Bº¸À≤“∆◊∑µ–
+		//if (ce->Game::teleport_track_enemy)
+		//{
+		//	if (GetAsyncKeyState(66) != 0)
+		//	{
+		//		if (ce->Game::m_locking_pawn != 0)
+		//			ce->Game::TeleportToTrackTheEnemyFunc(ce->Game::m_locking_pawn);
+		//	}
+		//}
+	}
+}
+
+void Draw::HookMainFunc()
+{
+	m_D3DCoordinate EnemyCoordinates = { NULL }, RetCoordinates = { NULL };		//µ–»À◊¯±Í  ∑µªÿ◊¯±Í
+	m_D3DCoordinate DepositCoordinates = { NULL }, TrackCoordinates = { NULL }, AiMBotCoordinates = { NULL };
+	if (ce->Game::aimbot)
+	{
+		if (ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_LEFT && GetAsyncKeyState(VK_LBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_RIGHT && GetAsyncKeyState(VK_RBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_KEYBOARD_ALT && GetAsyncKeyState(18) != 0)
+		{
+			if (ce->Game::m_locking_pawn != 0)
+			{
+				if (ce->Game::GetEnemyLive(ce->Game::m_locking_pawn) == FALSE)
+					ce->Game::m_locking_pawn = 0;
+				else
+				{
+					if (ce->Game::judgementbarrier)
+					{
+						ce->Game::GetBoneCoordinate(ce->Game::m_locking_pawn, &AiMBotCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+						if (ce->Game::IsVisible(RetCoordinates, AiMBotCoordinates))
+							ce->Game::MouseAimbot(ce->Game::AutomaticAimingAlgorithm(AiMBotCoordinates), this->Draw::gamecent_x, this->Draw::gamecent_y, this->Draw::gamewidth, this->Draw::gameheight);
+					}
+					else
+					{
+						ce->Game::GetBoneCoordinate(ce->Game::m_locking_pawn, &AiMBotCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+						ce->Game::MouseAimbot(ce->Game::AutomaticAimingAlgorithm(AiMBotCoordinates), this->Draw::gamecent_x, this->Draw::gamecent_y, this->Draw::gamewidth, this->Draw::gameheight);
+					}
+				}
+			}
+		}
+	}
+	if (ce->Game::track && ce->Game::m_recentdistance <= ce->Game::track_range)
+	{
+		if (ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_LEFT && GetAsyncKeyState(VK_LBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_RIGHT && GetAsyncKeyState(VK_RBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_KEYBOARD_ALT && GetAsyncKeyState(18) != 0)
+		{
+			if (ce->Game::m_locking_pawn != 0)
+			{
+				if (ce->Game::GetEnemyLive(ce->Game::m_locking_pawn))
+				{
+					if (ce->Game::judgementbarrier)
+					{
+						ce->Game::ModifyTrajectory();
+						ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+						if (ce->Game::IsVisible(RetCoordinates, EnemyCoordinates))//’œ∞≠≈–∂œ
+							ce->Game::TrackDeployment(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
+						else
+						{
+							ce->Game::ReductionTrajectory();
+							ce->Game::m_locking_pawn = 0;
+						}
+					}
+					else
+					{
+						ce->Game::ModifyTrajectory();
+						ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+						ce->Game::TrackDeployment(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
+					}
+				}
+				else
+				{
+					ce->Game::ReductionTrajectory();
+					ce->Game::m_locking_pawn = 0;
+				}
+			}
+		}
+		else
+		{
+			ce->Game::ReductionTrajectory();
+			ce->Game::m_locking_pawn = 0;
+		}
+	}
+	if (ce->Game::silence_track && ce->Game::m_recentdistance <= ce->Game::track_range)
+	{
+		if (ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_LEFT && GetAsyncKeyState(VK_LBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_RIGHT && GetAsyncKeyState(VK_RBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_KEYBOARD_ALT && GetAsyncKeyState(18) != 0)
+		{
+			if (ce->Game::m_locking_pawn != 0)
+			{
+				if (ce->Game::GetEnemyLive(ce->Game::m_locking_pawn))
+				{
+					if (ce->Game::judgementbarrier)
+					{
+						ce->Game::silence_track_switch = true;
+						ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+						if (ce->Game::IsVisible(RetCoordinates, EnemyCoordinates))//’œ∞≠≈–∂œ
+							ce->Game::WriteSilenceTrack(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
+						else
+						{
+							ce->Game::silence_track_switch = false;
+							ce->Game::m_locking_pawn = 0;
+						}
+					}
+					else
+					{
+						ce->Game::silence_track_switch = true;
+						ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+						ce->Game::WriteSilenceTrack(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
+					}
+				}
+				else
+				{
+					ce->Game::silence_track_switch = false;
+					ce->Game::m_locking_pawn = 0;
+				}
+			}
+		}
+		else
+		{
+			ce->Game::silence_track_switch = false;
+			ce->Game::m_locking_pawn = 0;
+		}
+	}
+}
+
+

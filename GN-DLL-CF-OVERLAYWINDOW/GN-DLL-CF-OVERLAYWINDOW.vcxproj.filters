@@ -39,6 +39,9 @@
     <Filter Include="ImGui">
       <UniqueIdentifier>{e1802461-1078-4eb2-996b-71a22ecd1d29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SDK">
+      <UniqueIdentifier>{00123689-3b1a-4ed4-9bc1-8901e0920749}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -97,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="CheatEngine\Tools\xorstr.h">
       <Filter>CheatEngine\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\sdk.h">
+      <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -100,6 +100,8 @@ public:
 	void DrawPreviewRay(RECT rect, int objx, int objy, int objw, int objh, bool side, D3DCOLOR color, float width);
 	void DrawTrackRange(RECT rect, int range, D3DCOLOR color, float width);
 	void MenuDraw();
+	void MainFuncDraw();
+	void HookMainFunc();
 
 };
 

@@ -45,11 +45,8 @@ CheatEngine::~CheatEngine()
 void CheatEngine::Rendering()
 {
 	MSG Message = { NULL };
-	while (Message.message != WM_QUIT)
+	while (true)
 	{
-		::GetMessageA(&Message, NULL, NULL, NULL);
-		if (Message.message == WM_QUIT)
-			break;
 		//Window message loop
 		if (PeekMessage(&Message, this->Draw::GetOverlayWindowHandle(), 0, 0, PM_REMOVE))
 		{
@@ -57,32 +54,32 @@ void CheatEngine::Rendering()
 			TranslateMessage(&Message);
 		}
 		else
-		{			
-			////you can also be in game window callback's WM_MOUSEMOVE message use this function too.
-			////this->Draw::MoveOverlayWindow(this->CheatEngine::game_window_handle, this->Draw::GetOverlayWindowHandle());
-			////this->Draw::GetGameWindowRect();
-			//this->Draw::BegineDirect11();
-			////this->Draw::SetImGuiMouse();
-			//this->Draw::MenuDraw();
-			//this->Draw::MainFuncDraw();
-			//this->Draw::EndDirect11();
-						
+		{
 			//you can also be in game window callback's WM_MOUSEMOVE message use this function too.
-			//this->Draw::MoveOverlayWindow(this->Draw::GetGameWindowHandle(), this->Draw::GetOverlayWindowHandle());
+			//this->Draw::MoveOverlayWindow(this->CheatEngine::game_window_handle, this->Draw::GetOverlayWindowHandle());
 			//this->Draw::GetGameWindowRect();
 			this->Draw::BegineDirect11();
-			this->Draw::SetImGuiMouse();
+			//this->Draw::SetImGuiMouse();
 			this->Draw::MenuDraw();
-			//this->Draw::MainFuncDraw();
+			this->Draw::MainFuncDraw();
 			this->Draw::EndDirect11();
+
+			////you can also be in game window callback's WM_MOUSEMOVE message use this function too.
+			//this->Draw::MoveOverlayWindow(this->Draw::GetGameWindowHandle(), this->Draw::GetOverlayWindowHandle());
+			//this->Draw::GetGameWindowRect();
+			//this->Draw::BegineDirect11();
+			//this->Draw::SetImGuiMouse();
+			//this->Draw::MenuDraw();
+			////this->Draw::MainFuncDraw();
+			//this->Draw::EndDirect11();
 		}
 	}
-	//// Cleanup
-	//ImGui_ImplDX11_Shutdown();
-	//ImGui_ImplWin32_Shutdown();
-	//ImGui::DestroyContext();
-	//this->CleanupDeviceD3D11();
-	//::DestroyWindow(this->GetOverlayWindowHandle());
+	// Cleanup
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+	this->CleanupDeviceD3D11();
+	::DestroyWindow(this->GetOverlayWindowHandle());
 }
 
 
