@@ -42,6 +42,9 @@
     <Filter Include="SDK">
       <UniqueIdentifier>{00123689-3b1a-4ed4-9bc1-8901e0920749}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Exception">
+      <UniqueIdentifier>{2928e18d-5862-493b-91a9-03b1f93a0096}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -103,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="sdk\sdk.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GN-EXCEPTION\Exception.h">
+      <Filter>Exception</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

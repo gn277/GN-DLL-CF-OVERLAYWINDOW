@@ -15,7 +15,6 @@ class Game :public MemoryTools
 {
 private:
 	DWORD game_processid = 0;								//进程PID
-	WNDPROC original_proc = nullptr;						//原始游戏窗口回调句柄
 
 	//障碍判断结构
 	IntersectInfo Info;
@@ -23,6 +22,7 @@ private:
 	//Driver* driver = nullptr;
 
 public:
+	WNDPROC original_proc = nullptr;						//原始游戏窗口回调句柄
 	void SetGameProcessId(DWORD processid) { game_processid = processid; }
 	DWORD GetGameProcessId() { return game_processid; }
 
@@ -117,6 +117,7 @@ public:
 	bool ReductionKnifeDistance();
 	void TeleportToTrackTheEnemyFunc(DWORD id);
 	void SpaceContinuousJumpFunc();
+	void HookRedNameTrackFunc(__int64 pointer, __int64 judgement_pointer);
 	bool TraversingBinaryTree(__int64 object, std::vector<__int64>* pvector);
 	void TraverseMonsterArray();
 	void SendSecKillPacket(std::vector<__int64>* pmonster_list);

@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\GN-EXCEPTION\Exception.h" />
     <ClInclude Include="CheatEngine\CheatEngine.h" />
     <ClInclude Include="CheatEngine\CheatEngineApi\CheatEngineApi.h" />
     <ClInclude Include="CheatEngine\Draw\Draw.h" />

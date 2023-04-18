@@ -1,6 +1,7 @@
 #include "DllMain.h"
 
 CheatEngine* ce = nullptr;
+extern GN_Exception* m_exception = nullptr;
 
 
 void CheatEngineInit(HINSTANCE hinstance)

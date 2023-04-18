@@ -1013,6 +1013,53 @@ void Game::SpaceContinuousJumpFunc()
 		this->Game::MemoryTools::WriteInt(this->Game::GameBase.SpaceContinuousJump, 0);
 }
 
+//ºìÃû×·×Ù¹¦ÄÜ
+void Game::HookRedNameTrackFunc(__int64 pointer, __int64 judgement_pointer)
+{
+	m_D3DCoordinate self_coordinates = { NULL }, aiming_coordinate = { NULL };
+	this->Game::GetSelfData(&self_coordinates);
+	if (this->Game::m_locking_pawn != 0)
+	{
+		if (this->Game::GetEnemyLive(this->Game::m_locking_pawn))
+		{
+			if ((this->Game::aim_hotkey == AIM_HOTKEY_MOUSE_LEFT && GetAsyncKeyState(VK_LBUTTON) != 0) || (this->Game::aim_hotkey == AIM_HOTKEY_MOUSE_RIGHT && GetAsyncKeyState(VK_RBUTTON) != 0) || (this->Game::aim_hotkey == AIM_HOTKEY_KEYBOARD_ALT && GetAsyncKeyState(18) != 0))
+			{
+				if (this->Game::redname_track)
+				{
+					if (this->MemoryTools::ReadInt(judgement_pointer + 0x14) != 7 && this->MemoryTools::ReadInt(pointer + 0x24) == 7)
+					{
+						if (this->Game::judgementbarrier)
+						{
+							if (this->Game::GetBoneCoordinate(this->Game::m_locking_pawn, &aiming_coordinate, (bool)this->Game::aim_position ? 6 : this->Game::RandomPosition()))
+							{
+								if (this->Game::IsVisible(self_coordinates, aiming_coordinate))//ÕÏ°­ÅÐ¶Ï
+								{
+									this->MemoryTools::WriteFloat(pointer + 0x0C, aiming_coordinate.x);
+									this->MemoryTools::WriteFloat(pointer + 0x10, aiming_coordinate.z + 18.9);
+									this->MemoryTools::WriteFloat(pointer + 0x14, aiming_coordinate.y);
+								}
+							}
+						}
+						else
+						{
+							if (this->Game::GetBoneCoordinate(this->Game::m_locking_pawn, &aiming_coordinate, (bool)this->Game::aim_position ? 6 : this->Game::RandomPosition()))
+							{
+								this->MemoryTools::WriteFloat(pointer + 0x0C, aiming_coordinate.x);
+								this->MemoryTools::WriteFloat(pointer + 0x10, aiming_coordinate.z + 18.9);
+								this->MemoryTools::WriteFloat(pointer + 0x14, aiming_coordinate.y);
+							}
+						}
+					}
+				}
+			}
+			else
+				this->Game::m_locking_pawn = 0;
+		}
+		else
+			this->Game::m_locking_pawn = 0;
+	}
+}
+
 //¶þ²æÊ÷
 bool Game::TraversingBinaryTree(__int64 object, std::vector<__int64>* pvector)
 {

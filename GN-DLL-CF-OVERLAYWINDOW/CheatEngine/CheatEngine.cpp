@@ -24,15 +24,15 @@ CheatEngine::CheatEngine(HINSTANCE hinstance)
 	//Create Overlay Window
 	if (!this->Draw::CreateOverlayWindow(L"GN_Window", L"GN_OverlayWindow", true/*inverse_screenshot*/))
 		OutputDebugStringA_1Param("[GN]:%s-> CreateOverlayWindow() failed", __FUNCTION__);
-	////Set Vector exception handler
-	//veh = new Veh;
-	////veh->Veh::SetVectoredExceptionHandler(VectoredHandler);
-	//veh->Veh::SetUnhandledExceptionFilter(VectoredHandler);
-	//int ret = veh->Veh::SetHardWareBreakPoint(L"crossfire.exe", 0x455,
-	//	this->Game::GameBase.ACE_BASE64 + GlobalBaseFuncOffset,
-	//	Hitchaddress,
-	//	RedNameTrackAddress,
-	//	SilentTrackAddress);
+	//Set Vector exception handler
+	m_exception = new GN_Exception;
+	//m_exception->GN_Exception::SetVectoredExceptionHandler(ExceptionHandler);
+	m_exception->GN_Exception::SetUnhandledExceptionFilter(ExceptionHandler);
+	int ret = m_exception->GN_Exception::SetHardWareBreakPoint(L"crossfire.exe", 0x455,
+		this->Game::GameBase.ACE_BASE64 + GlobalBaseFuncOffset,
+		Hitchaddress,
+		RedNameTrackAddress,
+		SilentTrackAddress);
 	////Set software break pointer
 	//this->CheatEngine::InitSoftWareBreakPoint(veh);
 }
@@ -82,5 +82,24 @@ void CheatEngine::Rendering()
 	::DestroyWindow(this->GetOverlayWindowHandle());
 }
 
-
+bool CheatEngine::ByPassCheck(PCONTEXT context)
+{
+	DWORD64 caller_address = ce->MemoryTools::ReadLong(context->Rsi);
+	////»æÖÆ¼ì²â
+	if ((caller_address > ce->Game::GameBase.Win32U) && (caller_address < ce->Game::GameBase.Win32UEnd))
+		return true;
+	if ((caller_address > ce->Game::GameBase.Gdi32) && (caller_address < ce->Game::GameBase.Gdi32End))
+		return true;
+	if ((caller_address > ce->Game::GameBase.D3D9) && (caller_address < ce->Game::GameBase.D3D9End))
+		return true;
+	//#if _REDBULLBRELEASE || _REDBULLBDEBUG
+	//	////¹¦ÄÜ¼ì²â
+	//	//DWORD64 callto_address = ce->MemoryTools::ReadLong(context->Rbx + 0x20);
+	//	//if (caller_address == ce->CheatEngine::Game::GameBase.Cshell + 0x12C6890)
+	//	//	return false;
+	//	if ((caller_address > ce->Game::GameBase.Cross) && (caller_address < ce->Game::GameBase.CrossEndAddress))
+	//		return true;
+	//#endif
+	return false;
+}
 
