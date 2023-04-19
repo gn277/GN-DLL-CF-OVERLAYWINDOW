@@ -19,8 +19,8 @@ CheatEngine::CheatEngine(HINSTANCE hinstance)
 	//this->CheatEngine::Drv = new Driver(NULL, NULL);
 	//this->CheatEngine::Drv->SetPID(this->SelfAPI::GetCurrentProcessId());
 	//this->Game::GetDriver(this->CheatEngine::Drv);
-	////Get game baseaddress
-	//this->Game::BaseAddressInit();
+	//Get game baseaddress
+	this->Game::BaseAddressInit();
 	//Create Overlay Window
 	if (!this->Draw::CreateOverlayWindow(L"GN_Window", L"GN_OverlayWindow", true/*inverse_screenshot*/))
 		OutputDebugStringA_1Param("[GN]:%s-> CreateOverlayWindow() failed", __FUNCTION__);
@@ -31,7 +31,7 @@ CheatEngine::CheatEngine(HINSTANCE hinstance)
 	int ret = m_exception->GN_Exception::SetHardWareBreakPoint(L"crossfire.exe", 0x455,
 		this->Game::GameBase.ACE_BASE64 + GlobalBaseFuncOffset,
 		Hitchaddress,
-		RedNameTrackAddress,
+		0/*RedNameTrackAddress*/,
 		SilentTrackAddress);
 	////Set software break pointer
 	//this->CheatEngine::InitSoftWareBreakPoint(veh);
@@ -59,7 +59,7 @@ void CheatEngine::Rendering()
 			//this->Draw::MoveOverlayWindow(this->CheatEngine::game_window_handle, this->Draw::GetOverlayWindowHandle());
 			//this->Draw::GetGameWindowRect();
 			this->Draw::BegineDirect11();
-			//this->Draw::SetImGuiMouse();
+			this->Draw::SetImGuiMouse();
 			this->Draw::MenuDraw();
 			this->Draw::MainFuncDraw();
 			this->Draw::EndDirect11();

@@ -385,22 +385,22 @@ void Draw::MenuDraw()
 			{
 				if (ImGui::Button(u8"ÐÞ¸Äµ¶¾à"))
 				{
-					////ÐÞ¸Äµ¶¾à
-					//if (this->Game::ChangeKnifeDistance(KnifeWieldingDistance, TapSpeed, HitSpeed, TapRange, HitRange))
-					//	ChangeStatu = TRUE;
-					//else
-					//	ChangeStatu = FALSE;
+					//ÐÞ¸Äµ¶¾à
+					if (ce->Game::ChangeKnifeDistance(KnifeWieldingDistance, TapSpeed, HitSpeed, TapRange, HitRange))
+						ChangeStatu = TRUE;
+					else
+						ChangeStatu = FALSE;
 				}
 			}
 			else
 			{
 				if (ImGui::Button(u8"»¹Ô­µ¶¾à"))
 				{
-					////»¹Ô­µ¶¾à
-					//if (this->Game::ReductionKnifeDistance())
-					//	ChangeStatu = FALSE;
-					//else
-					//	ChangeStatu = TRUE;
+					//»¹Ô­µ¶¾à
+					if (ce->Game::ReductionKnifeDistance())
+						ChangeStatu = FALSE;
+					else
+						ChangeStatu = TRUE;
 				}
 			}
 			ImGui::Separator();
@@ -563,111 +563,112 @@ void Draw::MainFuncDraw()
 		}
 		if (this->Draw::show_previewray)
 			this->Draw::DrawPreviewRay(ce->clientrect, DrawCoordinates[ce->Game::m_locking_pawn].X, DrawCoordinates[ce->Game::m_locking_pawn].Y, DrawCoordinates[ce->Game::m_locking_pawn].X + DrawCoordinates[ce->Game::m_locking_pawn].W, DrawCoordinates[ce->Game::m_locking_pawn].Y + DrawCoordinates[ce->Game::m_locking_pawn].H, ce->Game::aim_position, D3DCOLOR_RGBA(255, 0, 0, 255), 2);
-		if (ce->Game::aimbot)
-		{
-			if (ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_LEFT && GetAsyncKeyState(VK_LBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_RIGHT && GetAsyncKeyState(VK_RBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_KEYBOARD_ALT && GetAsyncKeyState(18) != 0)
-			{
-				if (ce->Game::m_locking_pawn != 0)
-				{
-					if (ce->Game::GetEnemyLive(ce->Game::m_locking_pawn) == FALSE)
-						ce->Game::m_locking_pawn = 0;
-					else
-					{
-						if (ce->Game::judgementbarrier)
-						{
-							ce->Game::GetBoneCoordinate(ce->Game::m_locking_pawn, &AiMBotCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
-							if (ce->Game::IsVisible(RetCoordinates, AiMBotCoordinates))
-								ce->Game::MouseAimbot(ce->Game::AutomaticAimingAlgorithm(AiMBotCoordinates), this->Draw::gamecent_x, this->Draw::gamecent_y, this->Draw::gamewidth, this->Draw::gameheight);
-						}
-						else
-						{
-							ce->Game::GetBoneCoordinate(ce->Game::m_locking_pawn, &AiMBotCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
-							ce->Game::MouseAimbot(ce->Game::AutomaticAimingAlgorithm(AiMBotCoordinates), this->Draw::gamecent_x, this->Draw::gamecent_y, this->Draw::gamewidth, this->Draw::gameheight);
-						}
-					}
-				}
-			}
-		}
-		if (ce->Game::track && ce->Game::m_recentdistance <= ce->Game::track_range)
-		{
-			if (ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_LEFT && GetAsyncKeyState(VK_LBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_RIGHT && GetAsyncKeyState(VK_RBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_KEYBOARD_ALT && GetAsyncKeyState(18) != 0)
-			{
-				if (ce->Game::m_locking_pawn != 0)
-				{
-					if (ce->Game::GetEnemyLive(ce->Game::m_locking_pawn))
-					{
-						if (ce->Game::judgementbarrier)
-						{
-							ce->Game::ModifyTrajectory();
-							ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
-							if (ce->Game::IsVisible(RetCoordinates, EnemyCoordinates))//ÕÏ°­ÅÐ¶Ï
-								ce->Game::TrackDeployment(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
-							else
-							{
-								ce->Game::ReductionTrajectory();
-								ce->Game::m_locking_pawn = 0;
-							}
-						}
-						else
-						{
-							ce->Game::ModifyTrajectory();
-							ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
-							ce->Game::TrackDeployment(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
-						}
-					}
-					else
-					{
-						ce->Game::ReductionTrajectory();
-						ce->Game::m_locking_pawn = 0;
-					}
-				}
-			}
-			else
-			{
-				ce->Game::ReductionTrajectory();
-				ce->Game::m_locking_pawn = 0;
-			}
-		}
-		if (ce->Game::silence_track && ce->Game::m_recentdistance <= ce->Game::track_range)
-		{
-			if (ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_LEFT && GetAsyncKeyState(VK_LBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_RIGHT && GetAsyncKeyState(VK_RBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_KEYBOARD_ALT && GetAsyncKeyState(18) != 0)
-			{
-				if (ce->Game::m_locking_pawn != 0)
-				{
-					if (ce->Game::GetEnemyLive(ce->Game::m_locking_pawn))
-					{
-						if (ce->Game::judgementbarrier)
-						{
-							ce->Game::silence_track_switch = true;
-							ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
-							if (ce->Game::IsVisible(RetCoordinates, EnemyCoordinates))//ÕÏ°­ÅÐ¶Ï
-								ce->Game::WriteSilenceTrack(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
-							else
-							{
-								ce->Game::silence_track_switch = false;
-								ce->Game::m_locking_pawn = 0;
-							}
-						}
-						else
-						{
-							ce->Game::silence_track_switch = true;
-							ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
-							ce->Game::WriteSilenceTrack(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
-						}
-					}
-					else
-					{
-						ce->Game::silence_track_switch = false;
-						ce->Game::m_locking_pawn = 0;
-					}
-				}
-			}
-			else
-			{
-				ce->Game::silence_track_switch = false;
-				ce->Game::m_locking_pawn = 0;
-			}
-		}
+		////²»hook¹Ò½ÓÊ±²»ÄÜÊ¹ÓÃÅÐ¶ÏÕÏ°­
+		//if (ce->Game::aimbot)
+		//{
+		//	if (ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_LEFT && GetAsyncKeyState(VK_LBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_RIGHT && GetAsyncKeyState(VK_RBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_KEYBOARD_ALT && GetAsyncKeyState(18) != 0)
+		//	{
+		//		if (ce->Game::m_locking_pawn != 0)
+		//		{
+		//			if (ce->Game::GetEnemyLive(ce->Game::m_locking_pawn) == FALSE)
+		//				ce->Game::m_locking_pawn = 0;
+		//			else
+		//			{
+		//				if (ce->Game::judgementbarrier)
+		//				{
+		//					ce->Game::GetBoneCoordinate(ce->Game::m_locking_pawn, &AiMBotCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+		//					if (ce->Game::IsVisible(RetCoordinates, AiMBotCoordinates))
+		//						ce->Game::MouseAimbot(ce->Game::AutomaticAimingAlgorithm(AiMBotCoordinates), this->Draw::gamecent_x, this->Draw::gamecent_y, this->Draw::gamewidth, this->Draw::gameheight);
+		//				}
+		//				else
+		//				{
+		//					ce->Game::GetBoneCoordinate(ce->Game::m_locking_pawn, &AiMBotCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+		//					ce->Game::MouseAimbot(ce->Game::AutomaticAimingAlgorithm(AiMBotCoordinates), this->Draw::gamecent_x, this->Draw::gamecent_y, this->Draw::gamewidth, this->Draw::gameheight);
+		//				}
+		//			}
+		//		}
+		//	}
+		//}
+		//if (ce->Game::track && ce->Game::m_recentdistance <= ce->Game::track_range)
+		//{
+		//	if (ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_LEFT && GetAsyncKeyState(VK_LBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_RIGHT && GetAsyncKeyState(VK_RBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_KEYBOARD_ALT && GetAsyncKeyState(18) != 0)
+		//	{
+		//		if (ce->Game::m_locking_pawn != 0)
+		//		{
+		//			if (ce->Game::GetEnemyLive(ce->Game::m_locking_pawn))
+		//			{
+		//				if (ce->Game::judgementbarrier)
+		//				{
+		//					ce->Game::ModifyTrajectory();
+		//					ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+		//					if (ce->Game::IsVisible(RetCoordinates, EnemyCoordinates))//ÕÏ°­ÅÐ¶Ï
+		//						ce->Game::TrackDeployment(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
+		//					else
+		//					{
+		//						ce->Game::ReductionTrajectory();
+		//						ce->Game::m_locking_pawn = 0;
+		//					}
+		//				}
+		//				else
+		//				{
+		//					ce->Game::ModifyTrajectory();
+		//					ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+		//					ce->Game::TrackDeployment(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
+		//				}
+		//			}
+		//			else
+		//			{
+		//				ce->Game::ReductionTrajectory();
+		//				ce->Game::m_locking_pawn = 0;
+		//			}
+		//		}
+		//	}
+		//	else
+		//	{
+		//		ce->Game::ReductionTrajectory();
+		//		ce->Game::m_locking_pawn = 0;
+		//	}
+		//}
+		//if (ce->Game::silence_track && ce->Game::m_recentdistance <= ce->Game::track_range)
+		//{
+		//	if (ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_LEFT && GetAsyncKeyState(VK_LBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_MOUSE_RIGHT && GetAsyncKeyState(VK_RBUTTON) != 0 || ce->Game::aim_hotkey == AIM_HOTKEY_KEYBOARD_ALT && GetAsyncKeyState(18) != 0)
+		//	{
+		//		if (ce->Game::m_locking_pawn != 0)
+		//		{
+		//			if (ce->Game::GetEnemyLive(ce->Game::m_locking_pawn))
+		//			{
+		//				if (ce->Game::judgementbarrier)
+		//				{
+		//					ce->Game::silence_track_switch = true;
+		//					ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+		//					if (ce->Game::IsVisible(RetCoordinates, EnemyCoordinates))//ÕÏ°­ÅÐ¶Ï
+		//						ce->Game::WriteSilenceTrack(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
+		//					else
+		//					{
+		//						ce->Game::silence_track_switch = false;
+		//						ce->Game::m_locking_pawn = 0;
+		//					}
+		//				}
+		//				else
+		//				{
+		//					ce->Game::silence_track_switch = true;
+		//					ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+		//					ce->Game::WriteSilenceTrack(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
+		//				}
+		//			}
+		//			else
+		//			{
+		//				ce->Game::silence_track_switch = false;
+		//				ce->Game::m_locking_pawn = 0;
+		//			}
+		//		}
+		//	}
+		//	else
+		//	{
+		//		ce->Game::silence_track_switch = false;
+		//		ce->Game::m_locking_pawn = 0;
+		//	}
+		//}
 		ce->CheatEngine::Game::SpaceContinuousJumpFunc();
 		//////B¼üË²ÒÆ×·µÐ
 		//if (ce->Game::teleport_track_enemy)
