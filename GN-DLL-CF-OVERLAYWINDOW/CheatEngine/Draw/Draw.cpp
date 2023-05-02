@@ -684,6 +684,7 @@ void Draw::MainFuncDraw()
 
 void Draw::HookMainFunc()
 {
+	//OutputDebugStringA("[GN]:HookMainFunc()\n");
 	m_D3DCoordinate EnemyCoordinates = { NULL }, RetCoordinates = { NULL };		//敌人坐标  返回坐标
 	m_D3DCoordinate DepositCoordinates = { NULL }, TrackCoordinates = { NULL }, AiMBotCoordinates = { NULL };
 	if (ce->Game::aimbot)

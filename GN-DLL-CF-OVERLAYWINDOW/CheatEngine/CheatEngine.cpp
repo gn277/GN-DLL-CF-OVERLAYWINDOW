@@ -29,10 +29,10 @@ CheatEngine::CheatEngine(HINSTANCE hinstance)
 	//m_exception->GN_Exception::SetVectoredExceptionHandler(ExceptionHandler);
 	m_exception->GN_Exception::SetUnhandledExceptionFilter(ExceptionHandler);
 	int ret = m_exception->GN_Exception::SetHardWareBreakPoint(L"crossfire.exe", 0x455,
-		this->Game::GameBase.ACE_BASE64 + GlobalBaseFuncOffset,
+		0/*this->Game::GameBase.ACE_BASE64 + GlobalBaseFuncOffset*/,
 		Hitchaddress,
 		0/*RedNameTrackAddress*/,
-		SilentTrackAddress);
+		0/*SilentTrackAddress*/);//视角追踪需要更新，不能用
 	////Set software break pointer
 	//this->CheatEngine::InitSoftWareBreakPoint(veh);
 }
@@ -58,8 +58,8 @@ void CheatEngine::Rendering()
 			//you can also be in game window callback's WM_MOUSEMOVE message use this function too.
 			//this->Draw::MoveOverlayWindow(this->CheatEngine::game_window_handle, this->Draw::GetOverlayWindowHandle());
 			//this->Draw::GetGameWindowRect();
-			this->Draw::BegineDirect11();
 			this->Draw::SetImGuiMouse();
+			this->Draw::BegineDirect11();
 			this->Draw::MenuDraw();
 			this->Draw::MainFuncDraw();
 			this->Draw::EndDirect11();
