@@ -433,7 +433,7 @@ void Draw::MenuDraw()
 
 void Draw::MainFuncDraw()
 {
-	int PeopleNumbers = 0, Police = 0, Position = 0;
+	int PeopleNumbers = 0, Police = 0, self_position = 0;
 	ce->Game::m_recentdistance = 0;
 	ce->Game::m_locking_pawn = 0;
 	if (this->Draw::show_crosshair)
@@ -447,13 +447,14 @@ void Draw::MainFuncDraw()
 		m_D3DCoordinate Coordinates = { NULL }, Sole = { NULL }, Head = { NULL };	//OBJ_坐标 脚轴 头轴
 		m_D3DCoordinate EnemyCoordinates = { NULL }, RetCoordinates = { NULL };		//敌人坐标  返回坐标
 		m_D3DCoordinate DepositCoordinates = { NULL }, TrackCoordinates = { NULL }, AiMBotCoordinates = { NULL };
-		Position = ce->Game::GetSelfPosition();
+		self_position = ce->Game::GetSelfPosition();
 		PeopleNumbers = ce->Game::GetCharacterNumber();
-		Police = (Position <= 8) ? 0 : 1;
+		//OutputDebugStringA_1Param("[GN]:人数：%d", PeopleNumbers);
+		Police = (self_position <= 8) ? 0 : 1;
 		ce->Game::GetSelfData(&RetCoordinates);
 		for (int i = 0; i <= 31; i++)
 		{
-			if (i == Position)
+			if (i == self_position)
 			{
 				Enemy = FALSE;
 				continue;
@@ -472,14 +473,16 @@ void Draw::MainFuncDraw()
 				if (this->Draw::show_teamate)//显示队友
 					Enemy = TRUE;
 				else
-					Enemy = ce->Game::GetBiochemicalModel(Position, i);
+					Enemy = ce->Game::GetBiochemicalModel(self_position, i);
 			}
 			if (Enemy)
 			{
-				if (i != Position)
+				if (i != self_position)
 				{
+					//OutputDebugStringA_2Param("[GN]:循环次数：%d,自己位置：%d", i, self_position);
 					if (ce->Game::GetEnemyLive(i))
 					{
+						//OutputDebugStringA_1Param("[GN]:第%d个敌人存活...", i);
 						__int64 Distance = 0;
 						char BloodVolumeText[15] = { NULL };//血量文本
 						char NicknameText[40] = { NULL };//昵称文本
@@ -576,13 +579,13 @@ void Draw::MainFuncDraw()
 		//			{
 		//				if (ce->Game::judgementbarrier)
 		//				{
-		//					ce->Game::GetBoneCoordinate(ce->Game::m_locking_pawn, &AiMBotCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+		//					ce->Game::GetBoneCoordinate(ce->Game::m_locking_pawn, &AiMBotCoordinates, (bool)ce->Game::aim_self_position ? 6 : ce->Game::Randomself_position());
 		//					if (ce->Game::IsVisible(RetCoordinates, AiMBotCoordinates))
 		//						ce->Game::MouseAimbot(ce->Game::AutomaticAimingAlgorithm(AiMBotCoordinates), this->Draw::gamecent_x, this->Draw::gamecent_y, this->Draw::gamewidth, this->Draw::gameheight);
 		//				}
 		//				else
 		//				{
-		//					ce->Game::GetBoneCoordinate(ce->Game::m_locking_pawn, &AiMBotCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+		//					ce->Game::GetBoneCoordinate(ce->Game::m_locking_pawn, &AiMBotCoordinates, (bool)ce->Game::aim_self_position ? 6 : ce->Game::Randomself_position());
 		//					ce->Game::MouseAimbot(ce->Game::AutomaticAimingAlgorithm(AiMBotCoordinates), this->Draw::gamecent_x, this->Draw::gamecent_y, this->Draw::gamewidth, this->Draw::gameheight);
 		//				}
 		//			}
@@ -600,7 +603,7 @@ void Draw::MainFuncDraw()
 		//				if (ce->Game::judgementbarrier)
 		//				{
 		//					ce->Game::ModifyTrajectory();
-		//					ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+		//					ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_self_position ? 6 : ce->Game::Randomself_position());
 		//					if (ce->Game::IsVisible(RetCoordinates, EnemyCoordinates))//障碍判断
 		//						ce->Game::TrackDeployment(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
 		//					else
@@ -612,7 +615,7 @@ void Draw::MainFuncDraw()
 		//				else
 		//				{
 		//					ce->Game::ModifyTrajectory();
-		//					ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+		//					ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_self_position ? 6 : ce->Game::Randomself_position());
 		//					ce->Game::TrackDeployment(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
 		//				}
 		//			}
@@ -640,7 +643,7 @@ void Draw::MainFuncDraw()
 		//				if (ce->Game::judgementbarrier)
 		//				{
 		//					ce->Game::silence_track_switch = true;
-		//					ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+		//					ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_self_position ? 6 : ce->Game::Randomself_position());
 		//					if (ce->Game::IsVisible(RetCoordinates, EnemyCoordinates))//障碍判断
 		//						ce->Game::WriteSilenceTrack(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
 		//					else
@@ -652,7 +655,7 @@ void Draw::MainFuncDraw()
 		//				else
 		//				{
 		//					ce->Game::silence_track_switch = true;
-		//					ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_position ? 6 : ce->Game::RandomPosition());
+		//					ce->Game::GetBoneCoordinate((__int64)ce->Game::m_locking_pawn, &EnemyCoordinates, (bool)ce->Game::aim_self_position ? 6 : ce->Game::Randomself_position());
 		//					ce->Game::WriteSilenceTrack(ce->Game::VectorToRotation(RetCoordinates, EnemyCoordinates));
 		//				}
 		//			}

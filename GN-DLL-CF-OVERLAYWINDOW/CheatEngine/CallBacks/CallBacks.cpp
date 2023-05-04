@@ -110,29 +110,16 @@ LONG WINAPI CheatEngine::ExceptionHandler(PEXCEPTION_POINTERS ExceptionInfo)
 	{
 		if (ExceptionInfo->ExceptionRecord->ExceptionAddress == (PVOID64)m_exception->mdr1)
 		{
-			//if (ce->CheatEngine::ByPassCheck(ExceptionInfo->ContextRecord))
-			//{
-			//	ExceptionInfo->ContextRecord->Rip = m_exception->mdr1 + 0x08;
-			//	OutputDebugStringA("[GN]:Pass Base...");
-			//	return EXCEPTION_CONTINUE_EXECUTION;
-			//}
-			//else
-			//{
-			//	ExceptionInfo->ContextRecord->Rip = m_exception->mdr1 + 0x05;
-			//	OutputDebugStringA("[GN]:Doing Base...");
-			//	return EXCEPTION_CONTINUE_EXECUTION;
-			//}
-			OutputDebugStringA("[GN]:Pass Base...");
 			if (ce->CheatEngine::ByPassCheck(ExceptionInfo->ContextRecord))
 			{
-				ExceptionInfo->ContextRecord->Rip = m_exception->mdr1 + 0x08;
+				ExceptionInfo->ContextRecord->Rip = m_exception->mdr1 + 0x07;
 				OutputDebugStringA("[GN]:Pass Base...");
 				return EXCEPTION_CONTINUE_EXECUTION;
 			}
 			else
 			{
-				ExceptionInfo->ContextRecord->Rip = m_exception->mdr1 + 0x05;
-				OutputDebugStringA("[GN]:Doing Base...");
+				ExceptionInfo->ContextRecord->Rip = m_exception->mdr1 + 0x04;
+				//OutputDebugStringA("[GN]:Doing Base...");
 				return EXCEPTION_CONTINUE_EXECUTION;
 			}
 		}
@@ -150,10 +137,14 @@ LONG WINAPI CheatEngine::ExceptionHandler(PEXCEPTION_POINTERS ExceptionInfo)
 		else if (ExceptionInfo->ExceptionRecord->ExceptionAddress == (PVOID64)m_exception->mdr3)
 		{
 			ce->CheatEngine::Game::HookRedNameTrackFunc(ExceptionInfo->ContextRecord->Rcx, ExceptionInfo->ContextRecord->Rbp);
+			
+			//*(__int64*)(ExceptionInfo->ContextRecord->Rsp + 0x18) = ExceptionInfo->ContextRecord->R8;
+			//*(__int64*)(ExceptionInfo->ContextRecord->Rsp + 0x10) = ExceptionInfo->ContextRecord->Rdx;
+			//*(__int64*)(ExceptionInfo->ContextRecord->Rsp + 0x08) = ExceptionInfo->ContextRecord->Rcx;
+			//ExceptionInfo->ContextRecord->Rip = m_exception->mdr3 + 0x0F;
+
 			*(__int64*)(ExceptionInfo->ContextRecord->Rsp + 0x18) = ExceptionInfo->ContextRecord->R8;
-			*(__int64*)(ExceptionInfo->ContextRecord->Rsp + 0x10) = ExceptionInfo->ContextRecord->Rdx;
-			*(__int64*)(ExceptionInfo->ContextRecord->Rsp + 0x08) = ExceptionInfo->ContextRecord->Rcx;
-			ExceptionInfo->ContextRecord->Rip = m_exception->mdr3 + 0x0F;
+			ExceptionInfo->ContextRecord->Rip = m_exception->mdr3 + 0x05;
 			return EXCEPTION_CONTINUE_EXECUTION;
 		}
 		//ÊÓ½Ç×·×Ù
@@ -386,4 +377,6 @@ LONG WINAPI CheatEngine::ExceptionHandler(PEXCEPTION_POINTERS ExceptionInfo)
 	}
 	return EXCEPTION_CONTINUE_SEARCH;
 }
+
+
 

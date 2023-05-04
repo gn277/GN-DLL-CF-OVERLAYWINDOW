@@ -6,7 +6,7 @@
 #define GDP_funcaddress 0x63980
 
 //BASE
-#define GlobalBaseFuncOffset 0x80E336							//全局BaseCall偏移			特征码：E9 00 00 00 00 FF 53 20 48 8B 1B 0x815844
+#define GlobalBaseFuncOffset 0x815844							//处理全局Base偏移
 #define PassBaseCheckOffset 0x1D3460							//在扫描点下面下hook 效验线程
 #define PassBaseAddressOffset 0x232B60							//在jmp上下hook
 #define BASEVirtualAllocOffset 0x2B4358							//Base模块调用VirtualAlloc
@@ -64,7 +64,7 @@
 #define Hitchaddress 0x1403B52B4								//绘制挂接地址				特征码：45 33 C9 45 33 C0 33 D2 E9 ?? ?? ?? ?? FF 15 ?? ?? ?? ?? 8B D8 
 #define DrawIndexedPrimitiveaddress 0x140254CD7					//渲染挂接地址				特征码：44 89 64 24 20 FF 90 ?? ?? 00 00 83 3D ?? ?? ?? ?? 02 7C ?? 8B 84 24 ?? ?? ?? ?? 按顺序数第十个地址
 #define SilentTrackAddress 0x140234D50							//静默追踪构造				特征码：48 83 EC 28 0F 28 C2 4C 8B CA F3 0F 10 54 24 ?? 
-#define RedNameTrackAddress 0x14023EBA8							//红名追踪地址				特征码：4C 89 44 24 ?? 48 89 54 24 ?? 48 89 4C 24 ?? 48 81 EC 98 00 00 00 48 C7 44 24 48 FE FF FF FF
+#define RedNameTrackAddress 0x140242418							//红名追踪地址				特征码：4C 89 44 24 ?? 48 89 54 24 ?? 48 89 4C 24 ?? 48 81 EC 98 00 00 00 48 C7 44 24 48 FE FF FF FF
 #define RangeTrackAddressOne 0x17352D							//范围追踪1					特征码：F3 0F 11 52 ?? F3 0F 11 4A?? F3 0F 11 42 ?? F3 0F 10 92 ?? ?? ?? ?? F3 0F 10 8A ?? ?? ?? ?? F3 0F 10 82 ?? ?? ?? ?? F3 0F 58 92 ?? ?? ?? ?? F3 0F 58 8A ?? ?? ?? ?? F3 0F 58 82 ?? ?? ?? ?? F3 0F 11 52 ?? F3 0F 11 4A ?? F3 0F 11 42 ?? 0F B6 82 ?? ?? ?? ?? 
 #define RangeTrackAddressTwo RangeTrackAddressOne + 0x27		//范围追踪2
 #define RangeTrackAddressThree 0x23DC21							//范围追踪3					特征码：F3 0F 11 44 24 ?? 48 8D 4C 24 ?? E8 ?? ?? ?? ?? F3 0F 10 4C 24 ?? 0F 2F C8 76 ?? 
@@ -227,5 +227,8 @@
 
 //玩家QQ
 #define UserQQNumberOffset 0x38									//玩家QQ偏移
+
+//敌人生存偏移
+#define EnemyLiveOffset 0x270
 
 

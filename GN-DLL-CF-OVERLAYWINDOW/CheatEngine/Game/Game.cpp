@@ -289,7 +289,8 @@ bool Game::IsInGaming()
 //取自己位置
 int Game::GetSelfPosition()
 {
-	return this->MemoryTools::ReadLong((this->MemoryTools::ReadLong(this->GameBase.PlayerArray) + 0x289)) + 1;
+	return this->MemoryTools::ReadLong((this->MemoryTools::ReadLong(this->GameBase.PlayerArray) + SelfAddressOffset)) + 1;
+	//return this->MemoryTools::ReadLong((this->MemoryTools::ReadLong(this->GameBase.PlayerArray) + SelfAddressOffset));
 }
 
 //取人物数量
@@ -374,26 +375,11 @@ char* Game::GetEnemyName(__int64 id)
 //取敌人生存
 bool Game::GetEnemyLive(__int64 id)
 {
-	//__int64 EnemyBaseAddressx = NULL, Plaply_INFOx;//敌人基址
-	//if (EnemyBaseAddressx == 0)
-	//{
-	//	EnemyBaseAddressx = GameBase.CharacterData + 24;
-	//}
-	//Plaply_INFOx = ReadLong(EnemyBaseAddressx + (id - 1) * GameBase.ArraySize);
-	//if (Plaply_INFOx == NULL)
-	//{
-	//	return FALSE;
-	//}
-	//if (ReadByte(Plaply_INFOx + 564) == (BYTE)0)
-	//{
-	//	return TRUE;
-	//}
-	//return FALSE;
 	__int64 Plaply_INFOx = 0;	//敌人基址
 	Plaply_INFOx = this->MemoryTools::ReadLong((this->GameBase.CharacterData + 24) + (id - 1) * this->GameBase.ArraySize);
 	if (Plaply_INFOx == NULL)
 		return FALSE;
-	if (this->MemoryTools::ReadByte(Plaply_INFOx + 564) == (BYTE)0)
+	if (this->MemoryTools::ReadByte(Plaply_INFOx + EnemyLiveOffset) == (BYTE)0)
 		return TRUE;
 	return FALSE;
 }

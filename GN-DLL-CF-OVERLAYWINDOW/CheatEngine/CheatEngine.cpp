@@ -7,34 +7,40 @@ CheatEngine::CheatEngine(HINSTANCE hinstance)
 	OutputDebugStringA_1Param("[GN]:%s", __FUNCTION__);
 	ce = this;
 	this->self_module_handle = hinstance;	
+
 	//Set overlay window handle
 	this->Draw::SetOverlayWindowHinstance(hinstance);
+
 	//Find game windowhandle and set game windowhandle
 	while (this->Draw::GetGameWindowHandle() == NULL)
 	{	this->Draw::SetGameWindowHandle(this->CheatEngineApi::FindWindowA("CrossFire", "穿越火线"));	}
+
 	DWORD game_pid = 0;
 	this->CheatEngineApi::GetWindowThreadProcessId(this->CheatEngine::GetGameWindowHandle(), &game_pid);
 	this->CheatEngine::SetGameProcessId(game_pid);
+
 	////Set my driver class
 	//this->CheatEngine::Drv = new Driver(NULL, NULL);
 	//this->CheatEngine::Drv->SetPID(this->SelfAPI::GetCurrentProcessId());
 	//this->Game::GetDriver(this->CheatEngine::Drv);
 	//Get game baseaddress
 	this->Game::BaseAddressInit();
+
 	//Create Overlay Window
 	if (!this->Draw::CreateOverlayWindow(L"GN_Window", L"GN_OverlayWindow", true/*inverse_screenshot*/))
 		OutputDebugStringA_1Param("[GN]:%s-> CreateOverlayWindow() failed", __FUNCTION__);
-	//Set Vector exception handler
-	m_exception = new GN_Exception;
-	//m_exception->GN_Exception::SetVectoredExceptionHandler(ExceptionHandler);
-	m_exception->GN_Exception::SetUnhandledExceptionFilter(ExceptionHandler);
-	int ret = m_exception->GN_Exception::SetHardWareBreakPoint(L"crossfire.exe", 0x455,
-		0/*this->Game::GameBase.ACE_BASE64 + GlobalBaseFuncOffset*/,
-		Hitchaddress,
-		0/*RedNameTrackAddress*/,
-		0/*SilentTrackAddress*/);//视角追踪需要更新，不能用
-	////Set software break pointer
-	//this->CheatEngine::InitSoftWareBreakPoint(veh);
+
+	////Set Vector exception handler
+	//m_exception = new GN_Exception;
+	////m_exception->GN_Exception::SetVectoredExceptionHandler(ExceptionHandler);
+	//m_exception->GN_Exception::SetUnhandledExceptionFilter(ExceptionHandler);
+	//int ret = m_exception->GN_Exception::SetHardWareBreakPoint(L"crossfire.exe", 0x455,
+	//	0/*this->Game::GameBase.ACE_BASE64 + GlobalBaseFuncOffset*/,
+	//	Hitchaddress,
+	//	0/*RedNameTrackAddress*/,
+	//	0/*SilentTrackAddress*/);//视角追踪需要更新，不能用
+	//////Set software break pointer
+	////this->CheatEngine::InitSoftWareBreakPoint(veh);
 }
 
 CheatEngine::~CheatEngine()
@@ -92,6 +98,12 @@ bool CheatEngine::ByPassCheck(PCONTEXT context)
 		return true;
 	if ((caller_address > ce->Game::GameBase.D3D9) && (caller_address < ce->Game::GameBase.D3D9End))
 		return true;
+	if (caller_address == ce->GameBase.Cshell + 0xA30D70)
+	{
+		OutputDebugStringA_1Param("[GN]:开枪，call地址：%p", caller_address);
+		return true;
+	}
+
 	//#if _REDBULLBRELEASE || _REDBULLBDEBUG
 	//	////功能检测
 	//	//DWORD64 callto_address = ce->MemoryTools::ReadLong(context->Rbx + 0x20);
