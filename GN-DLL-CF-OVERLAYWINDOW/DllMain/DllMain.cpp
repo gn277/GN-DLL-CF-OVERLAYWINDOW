@@ -1,4 +1,5 @@
 #include "DllMain.h"
+#include "../ReflectiveLoader/GN-ReflectiveLoader.h"
 
 CheatEngine* ce = nullptr;
 extern GN_Exception* m_exception = nullptr;
@@ -9,6 +10,18 @@ void CheatEngineInit(HINSTANCE hinstance)
     ce = new CheatEngine(hinstance);
     ce->Rendering();
     return delete ce;
+}
+
+extern "C" __declspec(dllexport) BOOL MyDLLFunction(LPVOID data, DWORD data_length)
+{
+    char temp[1024] = { NULL };
+    sprintf_s(temp, "调用的参数：%s", data);
+    OutputDebugStringA_1Param("[GN]:传入的用户数据:\n%s\n", temp);
+    //printf("传入的用户数据：\n");
+    //printf("%s\n", data);
+    ////MessageBoxA(NULL, temp, "MyDLLFunction", MB_OK);
+    //CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)TestFunc, NULL, NULL, NULL);
+    return TRUE;
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)

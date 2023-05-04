@@ -45,6 +45,9 @@
     <Filter Include="Exception">
       <UniqueIdentifier>{2928e18d-5862-493b-91a9-03b1f93a0096}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ReflectiveLoader">
+      <UniqueIdentifier>{9e267707-416a-4224-987d-2b727e331985}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -110,6 +113,9 @@
     <ClInclude Include="..\GN-EXCEPTION\Exception.h">
       <Filter>Exception</Filter>
     </ClInclude>
+    <ClInclude Include="ReflectiveLoader\GN-ReflectiveLoader.h">
+      <Filter>ReflectiveLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain\DllMain.cpp">
@@ -156,6 +162,9 @@
     </ClCompile>
     <ClCompile Include="lmGui\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ReflectiveLoader\GN-ReflectiveLoader.cpp">
+      <Filter>ReflectiveLoader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
