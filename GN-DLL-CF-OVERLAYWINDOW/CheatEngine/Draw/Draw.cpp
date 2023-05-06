@@ -31,7 +31,7 @@ bool Draw::CreateOverlayWindow(const wchar_t* class_name, const wchar_t* title_n
 	HWND my_overlay_window_handle = ::CreateWindowEx(WS_EX_TOPMOST | WS_EX_LAYERED | WS_EX_TOOLWINDOW, wc.lpszClassName, title_name, WS_POPUP, MyRect.left, MyRect.top, width, height, NULL, NULL, wc.hInstance, NULL);
 	this->SetOverlayWindowHandle(my_overlay_window_handle);
 
-	OutputDebugStringA_1Param("[GN]:%s->", __FUNCTION__);
+	//OutputDebugStringA_1Param("[GN]:%s->", __FUNCTION__);
 	if (!this->overlay_window_handle)
 	{
 		OutputDebugStringA_2Param("[GN]:%s-> overlay_window_handle:%p", __FUNCTION__, this->overlay_window_handle);
@@ -61,7 +61,7 @@ bool Draw::CreateOverlayWindow(const wchar_t* class_name, const wchar_t* title_n
 
 void Draw::InitImGui(HWND hwnd)
 {
-	OutputDebugStringA_1Param("[GN]:%s->", __FUNCTION__);
+	//OutputDebugStringA_1Param("[GN]:%s->", __FUNCTION__);
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.IniFilename = nullptr;
@@ -81,7 +81,7 @@ void Draw::InitImGui(HWND hwnd)
 
 bool Draw::CreateDeviceD3D9(HWND hwnd)
 {
-	OutputDebugStringA_1Param("[GN]:%s->", __FUNCTION__);
+	//OutputDebugStringA_1Param("[GN]:%s->", __FUNCTION__);
 	this->direct9.object = Direct3DCreate9(D3D_SDK_VERSION);
 	if (this->direct9.object == FALSE)
 	{
@@ -103,7 +103,7 @@ bool Draw::CreateDeviceD3D9(HWND hwnd)
 
 bool Draw::CreateDeviceD3D11(HWND hwnd)
 {
-	OutputDebugStringA_1Param("[GN]:%s->", __FUNCTION__);
+	//OutputDebugStringA_1Param("[GN]:%s->", __FUNCTION__);
 	HMODULE libD3D11;
 	void* D3D11CreateDeviceAndSwapChain;
 	if ((libD3D11 = ::GetModuleHandleW(L"d3d11.dll")) == NULL) return false;

@@ -30,17 +30,15 @@ CheatEngine::CheatEngine(HINSTANCE hinstance)
 	if (!this->Draw::CreateOverlayWindow(L"GN_Window", L"GN_OverlayWindow", true/*inverse_screenshot*/))
 		OutputDebugStringA_1Param("[GN]:%s-> CreateOverlayWindow() failed", __FUNCTION__);
 
-	////Set Vector exception handler
-	//m_exception = new GN_Exception;
-	////m_exception->GN_Exception::SetVectoredExceptionHandler(ExceptionHandler);
-	//m_exception->GN_Exception::SetUnhandledExceptionFilter(ExceptionHandler);
-	//int ret = m_exception->GN_Exception::SetHardWareBreakPoint(L"crossfire.exe", 0x455,
-	//	0/*this->Game::GameBase.ACE_BASE64 + GlobalBaseFuncOffset*/,
-	//	Hitchaddress,
-	//	0/*RedNameTrackAddress*/,
-	//	0/*SilentTrackAddress*/);//视角追踪需要更新，不能用
-	//////Set software break pointer
-	////this->CheatEngine::InitSoftWareBreakPoint(veh);
+	//Set Exception Handler
+	if (!gn_exception->InstallException(CheatEngine::NewExceptionHandler))
+		exit(0);
+	int ret = gn_exception->GN_Exception::SetHardWareBreakPoint(L"crossfire.exe", 0x455,
+	0/*this->Game::GameBase.ACE_BASE64 + GlobalBaseFuncOffset*/,
+	/*0*/Hitchaddress,
+	0/*RedNameTrackAddress*/,
+	0/*SilentTrackAddress*/);//视角追踪需要更新，不能用
+
 }
 
 CheatEngine::~CheatEngine()

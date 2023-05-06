@@ -15,7 +15,7 @@ Game::~Game()
 
 void Game::BaseAddressInit()
 {
-	OutputDebugStringA_1Param("[GN]:%s", __FUNCTION__);
+	//OutputDebugStringA_1Param("[GN]:%s", __FUNCTION__);
 	MODULEINFO ModuleInfo = { 0 };
 	this->GameBase.Cshell = (unsigned __int64)ce->CheatEngineApi::GetModuleHandleA("cshell_x64.dll");
 	GetModuleInformation(ce->CheatEngineApi::GetCurrentProcess(), ce->CheatEngineApi::GetModuleHandleA("cshell_x64.dll"), &ModuleInfo, sizeof(MODULEINFO));

@@ -6,6 +6,5 @@
 
 
 extern CheatEngine* ce;
-extern GN_Exception* m_exception;
 
 

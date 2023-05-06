@@ -24,4 +24,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="ShellCode.asm">
+      <Filter>源文件</Filter>
+    </CustomBuild>
+  </ItemGroup>
 </Project>
