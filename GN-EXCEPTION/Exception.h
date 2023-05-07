@@ -63,6 +63,9 @@ public:
 public:
     ExceptionHandlerApi pExceptionHandlerApi = NULL;
 
+private:
+    void SetMDR(DWORD64 dr0, DWORD64 dr1, DWORD64 dr2, DWORD64 dr3);
+
 public:
     GN_Exception();
     ~GN_Exception();

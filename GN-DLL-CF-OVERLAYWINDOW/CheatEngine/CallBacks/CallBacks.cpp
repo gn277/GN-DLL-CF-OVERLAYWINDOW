@@ -403,7 +403,7 @@ LONG WINAPI CheatEngine::NewExceptionHandler(PEXCEPTION_RECORD ExceptionRecord, 
 		else if (ExceptionRecord->ExceptionAddress == (PVOID64)gn_exception->mdr2)
 		{
 			OutputDebugStringA("[GN]:»æÖÆ¹Ò½Ó...");
-			//CheatEngine::Self_Present((IDirect3DDevice9*)context->Rcx, NULL, NULL, NULL, NULL);
+			CheatEngine::Self_Present((IDirect3DDevice9*)context->Rcx, NULL, NULL, NULL, NULL);
 			context->R9 = 0;
 			context->R8 = 0;
 			context->Rdx = 0;

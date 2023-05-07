@@ -6,6 +6,11 @@ CheatEngine::CheatEngine(HINSTANCE hinstance)
 {
 	OutputDebugStringA_1Param("[GN]:%s", __FUNCTION__);
 	ce = this;
+
+	//Set Exception Handler
+	if (!gn_exception->InstallException(CheatEngine::NewExceptionHandler))
+		exit(0);
+
 	this->self_module_handle = hinstance;	
 
 	//Set overlay window handle
@@ -31,8 +36,6 @@ CheatEngine::CheatEngine(HINSTANCE hinstance)
 		OutputDebugStringA_1Param("[GN]:%s-> CreateOverlayWindow() failed", __FUNCTION__);
 
 	//Set Exception Handler
-	if (!gn_exception->InstallException(CheatEngine::NewExceptionHandler))
-		exit(0);
 	int ret = gn_exception->GN_Exception::SetHardWareBreakPoint(L"crossfire.exe", 0x455,
 	0/*this->Game::GameBase.ACE_BASE64 + GlobalBaseFuncOffset*/,
 	/*0*/Hitchaddress,
