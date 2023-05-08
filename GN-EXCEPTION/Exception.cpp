@@ -15,7 +15,7 @@ extern "C" NTSTATUS NtContinue(PCONTEXT, unsigned long long);
 extern "C" void MyCallbackEntry();
 extern "C" void MyCallbackRoutine(CONTEXT * context);
 
-DWORD64 sysret_address = 0;
+__int64 sysret_address = 0, RtlRestoreContext_offset = 0;
 
 
 GN_Exception::GN_Exception()
@@ -165,30 +165,24 @@ LONG WINAPI ReturnExceptionHandler(PEXCEPTION_POINTERS ExceptionInfo)
 
 bool GN_Exception::InstallException(ExceptionHandlerApi exception_handler_api)
 {
-	if (exception_handler_api == NULL)
-	{
-		OutputDebugStringA("[GN]:exception_handler_api is nullptr");
-		return false;
-	}
-	else
-		this->pExceptionHandlerApi = exception_handler_api;
+	//保存函数指针
+	this->pExceptionHandlerApi = exception_handler_api;
 
 	//////创建一个异常函数用来专门处理返回值
 	//this->SetUnhandledExceptionFilter(ReturnExceptionHandler);
 	////this->SetVectoredExceptionHandler(true, ReturnExceptionHandler);//不能添加一个空白异常处理函数到veh链表，否则添加时会卡住
 
 	//获取hook的返回地址
-	do
-	{
-		sysret_address = (DWORD64)::GetProcAddress(GetModuleHandleA("ntdll.dll"), "KiUserExceptionDispatcher");
-		OutputDebugStringA_1Param("[GN]:InstallException()获取返回地址:%p...", sysret_address);
-	} while (sysret_address == 0);
+	sysret_address = (__int64)::GetProcAddress(::LoadLibraryA("ntdll.dll"), "KiUserExceptionDispatcher");
+	if (sysret_address == NULL)
+		sysret_address = (__int64)::GetProcAddress(::LoadLibraryA("ntdll.dll"), "KiUserExceptionDispatcher");
+	RtlRestoreContext_offset = this->GetOffset(sysret_address, 0x70, 0x10);
 
-	if (!this->InitSymbol())
-	{
-		OutputDebugStringA("[GN]:InitSymbol() error!");
-		return false;
-	}
+	//if (!this->InitSymbol())
+	//{
+	//	OutputDebugStringA("[GN]:InitSymbol() error!");
+	//	return false;
+	//}
 
 	this->tls_index = TlsAlloc();
 
@@ -210,6 +204,46 @@ bool GN_Exception::InitSymbol()
 {
 	SymSetOptions(SYMOPT_UNDNAME);
 	return SymInitialize(GetCurrentProcess(), NULL, TRUE);
+}
+
+BYTE* GN_Exception::ReadBytes(DWORD64 address, SIZE_T size)
+{
+	BYTE ReturnValue[] = { NULL };
+
+	if (IsBadReadPtr((VOID*)address, size))
+		return { 0x00 };
+	for (int i = 0; i < size; i++)
+		ReturnValue[i] = *(BYTE*)address++;
+
+	return ReturnValue;
+}
+
+__int64 GN_Exception::GetOffset(DWORD64 start_address, SIZE_T end_offset, SIZE_T weight)
+{
+	__int64 ret_address = 0;
+	BYTE temp_address[5] = { NULL };
+	BYTE judgment[5] = { 0x48,0x8B,0xCC,0x33,0xD2 };
+	// mov	rcx, rsp
+	// xor	edx, edx
+	// call	RtlRestoreContext
+
+	//起始地址+起始偏移
+	start_address += weight;
+
+	for (size_t i = 0; i < end_offset; i++)
+	{
+		memcpy((PVOID)temp_address, (PVOID)start_address, sizeof(judgment));
+		if (_memicmp(temp_address, judgment, sizeof(judgment)) == 0)
+		{
+			OutputDebugStringA_1Param("[GN]:找到特征，地址：%p", start_address);
+			ret_address = start_address;
+			return ret_address;
+		}
+		else
+			start_address++;
+	}
+
+	return ret_address;
 }
 
 PThreadData GN_Exception::GetThreadDataBuffer()
@@ -275,10 +309,7 @@ void MyCallbackRoutine(CONTEXT* context)
 		LONG status = gn_exception->pExceptionHandlerApi((PEXCEPTION_RECORD)(context->Rsp + 0x4F0), (PCONTEXT)context->Rsp);
 		if (status == EXCEPTION_CONTINUE_EXECUTION)
 		{
-			//OutputDebugStringA_1Param("[GN]:之前的返回地址:%p", context->Rip);
-			//context->Rip += 0x32;//让Rip跳转到KiUserExceptionDispatcher+0x32处调用RtlRestoreContext
-			context->Rip += 0x3E;//让Rip跳转到KiUserExceptionDispatcher+0x32处调用RtlRestoreContext 偏移有变化
-			//OutputDebugStringA_1Param("[GN]:处理之后的返回地址:%p", context->Rip);
+			context->Rip = RtlRestoreContext_offset;
 			//OutputDebugStringA("[GN]:修复context");
 		}
 	}

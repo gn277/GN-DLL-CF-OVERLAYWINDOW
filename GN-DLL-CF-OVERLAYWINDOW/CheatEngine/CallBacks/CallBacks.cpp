@@ -403,20 +403,18 @@ LONG WINAPI CheatEngine::NewExceptionHandler(PEXCEPTION_RECORD ExceptionRecord, 
 		else if (ExceptionRecord->ExceptionAddress == (PVOID64)gn_exception->mdr2)
 		{
 			OutputDebugStringA("[GN]:»æÖÆ¹Ò½Ó...");
-			CheatEngine::Self_Present((IDirect3DDevice9*)context->Rcx, NULL, NULL, NULL, NULL);
+			//CheatEngine::Self_Present((IDirect3DDevice9*)context->Rcx, NULL, NULL, NULL, NULL);
 			context->R9 = 0;
 			context->R8 = 0;
 			context->Rdx = 0;
 			context->Rip = gn_exception->mdr2 + 0x08;
-
-			//RtlRestoreContext(context, 0);
 			return EXCEPTION_CONTINUE_EXECUTION;
 		}
 		//ºìÃû×·×Ùhook
 		else if (ExceptionRecord->ExceptionAddress == (PVOID64)gn_exception->mdr3)
 		{
 			ce->CheatEngine::Game::HookRedNameTrackFunc(context->Rcx, context->Rbp);
-			
+
 			//*(__int64*)(ExceptionInfo->ContextRecord->Rsp + 0x18) = ExceptionInfo->ContextRecord->R8;
 			//*(__int64*)(ExceptionInfo->ContextRecord->Rsp + 0x10) = ExceptionInfo->ContextRecord->Rdx;
 			//*(__int64*)(ExceptionInfo->ContextRecord->Rsp + 0x08) = ExceptionInfo->ContextRecord->Rcx;
@@ -443,6 +441,14 @@ LONG WINAPI CheatEngine::NewExceptionHandler(PEXCEPTION_RECORD ExceptionRecord, 
 				RtlCopyMemory(&context->Xmm1, &context->Xmm3, sizeof(float));
 			context->Rip = gn_exception->mdr4 + 0x03;
 			return EXCEPTION_CONTINUE_EXECUTION;
+		}
+		else
+		{
+			context->Dr0 = gn_exception->mdr1;
+			context->Dr1 = gn_exception->mdr2;
+			context->Dr2 = gn_exception->mdr3;
+			context->Dr3 = gn_exception->mdr4;
+			return EXCEPTION_CONTINUE_SEARCH;
 		}
 	}
 	return EXCEPTION_CONTINUE_SEARCH;

@@ -65,6 +65,8 @@ public:
 
 private:
     void SetMDR(DWORD64 dr0, DWORD64 dr1, DWORD64 dr2, DWORD64 dr3);
+    BYTE* ReadBytes(DWORD64 address, SIZE_T size);
+    __int64 GetOffset(DWORD64 start_address, SIZE_T end_offset, SIZE_T weight);
 
 public:
     GN_Exception();

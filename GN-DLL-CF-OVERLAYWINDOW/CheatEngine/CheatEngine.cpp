@@ -7,10 +7,6 @@ CheatEngine::CheatEngine(HINSTANCE hinstance)
 	OutputDebugStringA_1Param("[GN]:%s", __FUNCTION__);
 	ce = this;
 
-	//Set Exception Handler
-	if (!gn_exception->InstallException(CheatEngine::NewExceptionHandler))
-		exit(0);
-
 	this->self_module_handle = hinstance;	
 
 	//Set overlay window handle
@@ -36,6 +32,8 @@ CheatEngine::CheatEngine(HINSTANCE hinstance)
 		OutputDebugStringA_1Param("[GN]:%s-> CreateOverlayWindow() failed", __FUNCTION__);
 
 	//Set Exception Handler
+	if (!gn_exception->InstallException(CheatEngine::NewExceptionHandler))
+		exit(0);
 	int ret = gn_exception->GN_Exception::SetHardWareBreakPoint(L"crossfire.exe", 0x455,
 	0/*this->Game::GameBase.ACE_BASE64 + GlobalBaseFuncOffset*/,
 	/*0*/Hitchaddress,
@@ -62,13 +60,13 @@ void CheatEngine::Rendering()
 		}
 		else
 		{
-			//you can also be in game window callback's WM_MOUSEMOVE message use this function too.
-			//this->Draw::MoveOverlayWindow(this->CheatEngine::game_window_handle, this->Draw::GetOverlayWindowHandle());
-			//this->Draw::GetGameWindowRect();
-			this->Draw::SetImGuiMouse();
+			////you can also be in game window callback's WM_MOUSEMOVE message use this function too.
+			////this->Draw::MoveOverlayWindow(this->CheatEngine::game_window_handle, this->Draw::GetOverlayWindowHandle());
+			////this->Draw::GetGameWindowRect();
+			//this->Draw::SetImGuiMouse();
 			this->Draw::BegineDirect11();
-			this->Draw::MenuDraw();
-			this->Draw::MainFuncDraw();
+			//this->Draw::MenuDraw();
+			////this->Draw::MainFuncDraw();
 			this->Draw::EndDirect11();
 
 			////you can also be in game window callback's WM_MOUSEMOVE message use this function too.
