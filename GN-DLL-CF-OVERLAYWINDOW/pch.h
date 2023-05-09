@@ -14,6 +14,7 @@
 #include <winnls.h>
 #include <tlhelp32.h>
 #include <winsock.h>
+#include "VMProtectSDK/VMProtectSDK.h"
 
 #pragma comment(lib,"dwmapi.lib")
 #pragma comment(lib,"ws2_32.lib")

@@ -5,12 +5,17 @@
 #include "Tools/Tools.h"
 #include "MemoryTools/MemoryTools.h"
 #include "CheatEngineApi/CheatEngineApi.h"
+#include "../Driver/Driver.h"
+#pragma comment(lib,"Driver/GN-Driver-Lib.lib")
 
 
 class CheatEngine :public Game, public Draw, public MemoryTools, public Tools, public CheatEngineApi
 {
 private:
 	HMODULE self_module_handle = NULL;
+
+public:
+	Driver* driver = nullptr;
 
 public:
 	void GameKeyCallBack(WPARAM wParam, LPARAM lParam);

@@ -45,8 +45,14 @@
     <Filter Include="Exception">
       <UniqueIdentifier>{2928e18d-5862-493b-91a9-03b1f93a0096}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ReflectiveLoader">
+    <Filter Include="Driver">
+      <UniqueIdentifier>{b061ad7d-d914-4464-9ccc-4028af284bb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectiveLoader-User">
       <UniqueIdentifier>{9e267707-416a-4224-987d-2b727e331985}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VMProtectSDK">
+      <UniqueIdentifier>{bd7fcea4-849d-4085-ac87-121205cc480c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -113,8 +119,20 @@
     <ClInclude Include="..\GN-EXCEPTION\Exception.h">
       <Filter>Exception</Filter>
     </ClInclude>
-    <ClInclude Include="ReflectiveLoader\GN-ReflectiveLoader.h">
-      <Filter>ReflectiveLoader</Filter>
+    <ClInclude Include="Driver\Driver.h">
+      <Filter>Driver</Filter>
+    </ClInclude>
+    <ClInclude Include="Driver\GN-ManualMap.h">
+      <Filter>Driver</Filter>
+    </ClInclude>
+    <ClInclude Include="Driver\GN-ReflectiveLoader.h">
+      <Filter>Driver</Filter>
+    </ClInclude>
+    <ClInclude Include="ReflectiveLoader-User\GN-ReflectiveLoader-User.h">
+      <Filter>ReflectiveLoader-User</Filter>
+    </ClInclude>
+    <ClInclude Include="VMProtectSDK\VMProtectSDK.h">
+      <Filter>VMProtectSDK</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -163,13 +181,18 @@
     <ClCompile Include="lmGui\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="ReflectiveLoader\GN-ReflectiveLoader.cpp">
-      <Filter>ReflectiveLoader</Filter>
+    <ClCompile Include="ReflectiveLoader-User\GN-ReflectiveLoader-User.cpp">
+      <Filter>ReflectiveLoader-User</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="lmGui\imgui.cppback">
       <Filter>ImGui</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="VMProtectSDK\VMProtectSDK64.lib">
+      <Filter>VMProtectSDK</Filter>
+    </Library>
   </ItemGroup>
 </Project>

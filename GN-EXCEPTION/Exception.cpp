@@ -15,6 +15,7 @@ extern "C" NTSTATUS NtContinue(PCONTEXT, unsigned long long);
 extern "C" void MyCallbackEntry();
 extern "C" void MyCallbackRoutine(CONTEXT * context);
 
+bool call_status = false;
 __int64 sysret_address = 0, RtlRestoreContext_offset = 0;
 
 
@@ -276,33 +277,63 @@ void MyCallbackRoutine(CONTEXT* context)
 	context->Rsp = __readgsqword(0x02E0);//context = rsp, ExceptionRecord = rsp + 0x4F0
 	context->Rcx = context->R10;
 
-	PThreadData current_thread_data = gn_exception->GetThreadDataBuffer();
-	if (current_thread_data->IsThreadHandlingSyscall)
-		NtContinue(context, 0);
-	current_thread_data->IsThreadHandlingSyscall = true;
-
-	////解析调用的函数名
-	//CHAR buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME] = { 0 };
-	//PSYMBOL_INFO pSymbol = (PSYMBOL_INFO)buffer;
-	//pSymbol->SizeOfStruct = sizeof(SYMBOL_INFO);
-	//pSymbol->MaxNameLen = MAX_SYM_NAME;
-	//DWORD64 Displacement;
-	//BOOLEAN result = SymFromAddr(GetCurrentProcess(), context->Rip, &Displacement, pSymbol);
-	//if (result)
+	//PThreadData current_thread_data = gn_exception->GetThreadDataBuffer();
+	//if (current_thread_data->IsThreadHandlingSyscall)
+	//	NtContinue(context, 0);
+	//current_thread_data->IsThreadHandlingSyscall = true;
+	//
+	//////解析调用的函数名
+	////CHAR buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME] = { 0 };
+	////PSYMBOL_INFO pSymbol = (PSYMBOL_INFO)buffer;
+	////pSymbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+	////pSymbol->MaxNameLen = MAX_SYM_NAME;
+	////DWORD64 Displacement;
+	////BOOLEAN result = SymFromAddr(GetCurrentProcess(), context->Rip, &Displacement, pSymbol);
+	////if (result)
+	////{
+	////	//if (_stricmp(pSymbol->Name, "ZwRaiseException") == 0)
+	////	if (_stricmp(pSymbol->Name, "KiUserExceptionDispatcher") == 0)
+	////	{
+	////		OutputDebugStringA_2Param("[GN]:Function: %s Address: %p", pSymbol->Name, context->Rip);
+	////		//LONG status = gn_exception->pExceptionHandlerApi((PEXCEPTION_RECORD)(context->Rsp + 0x4F0), (PCONTEXT)context->Rsp);
+	////		//if (status == EXCEPTION_CONTINUE_EXECUTION)
+	////		//{
+	////		//	//OutputDebugStringA("[GN]:Rax为0");
+	////		//	//context->Rax = 0;
+	////		//	RtlRestoreContext((PCONTEXT)context->Rsp, 0);
+	////		//}
+	////	}
+	////}
+	//
+	//if (context->Rip == sysret_address)
 	//{
-	//	//if (_stricmp(pSymbol->Name, "ZwRaiseException") == 0)
-	//	if (_stricmp(pSymbol->Name, "KiUserExceptionDispatcher") == 0)
+	//	LONG status = gn_exception->pExceptionHandlerApi((PEXCEPTION_RECORD)(context->Rsp + 0x4F0), (PCONTEXT)context->Rsp);
+	//	if (status == EXCEPTION_CONTINUE_EXECUTION)
 	//	{
-	//		OutputDebugStringA_2Param("[GN]:Function: %s Address: %p", pSymbol->Name, context->Rip);
-	//		//LONG status = gn_exception->pExceptionHandlerApi((PEXCEPTION_RECORD)(context->Rsp + 0x4F0), (PCONTEXT)context->Rsp);
-	//		//if (status == EXCEPTION_CONTINUE_EXECUTION)
-	//		//{
-	//		//	//OutputDebugStringA("[GN]:Rax为0");
-	//		//	//context->Rax = 0;
-	//		//	RtlRestoreContext((PCONTEXT)context->Rsp, 0);
-	//		//}
+	//		context->Rip = RtlRestoreContext_offset;
+	//		//OutputDebugStringA("[GN]:修复context");
 	//	}
 	//}
+	//current_thread_data->IsThreadHandlingSyscall = false;
+	//NtContinue(context, 0);
+
+	//if (!call_status)
+	//{
+	//	call_status = true;
+	//
+	//	if (context->Rip == sysret_address)
+	//	{
+	//		LONG status = gn_exception->pExceptionHandlerApi((PEXCEPTION_RECORD)(context->Rsp + 0x4F0), (PCONTEXT)context->Rsp);
+	//		if (status == EXCEPTION_CONTINUE_EXECUTION)
+	//		{
+	//			context->Rip = RtlRestoreContext_offset;
+	//			//OutputDebugStringA("[GN]:修复context");
+	//		}
+	//	}
+	//
+	//	call_status = false;
+	//}
+	//NtContinue(context, 0);
 
 	if (context->Rip == sysret_address)
 	{
@@ -313,8 +344,6 @@ void MyCallbackRoutine(CONTEXT* context)
 			//OutputDebugStringA("[GN]:修复context");
 		}
 	}
-
-	current_thread_data->IsThreadHandlingSyscall = false;
 	NtContinue(context, 0);
 }
 

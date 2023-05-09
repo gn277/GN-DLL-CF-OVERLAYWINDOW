@@ -5,9 +5,11 @@
 CheatEngine::CheatEngine(HINSTANCE hinstance)
 {
 	OutputDebugStringA_1Param("[GN]:%s", __FUNCTION__);
-	ce = this;
 
-	this->self_module_handle = hinstance;	
+	//Save Modulehandle
+	this->self_module_handle = hinstance;
+
+	ce = this;
 
 	//Set overlay window handle
 	this->Draw::SetOverlayWindowHinstance(hinstance);
@@ -21,9 +23,9 @@ CheatEngine::CheatEngine(HINSTANCE hinstance)
 	this->CheatEngine::SetGameProcessId(game_pid);
 
 	////Set my driver class
-	//this->CheatEngine::Drv = new Driver(NULL, NULL);
-	//this->CheatEngine::Drv->SetPID(this->SelfAPI::GetCurrentProcessId());
-	//this->Game::GetDriver(this->CheatEngine::Drv);
+	this->CheatEngine::driver = new Driver;
+	this->CheatEngine::driver->SetProcessID(this->CheatEngineApi::GetCurrentProcessId());
+	
 	//Get game baseaddress
 	this->Game::BaseAddressInit();
 
@@ -35,10 +37,19 @@ CheatEngine::CheatEngine(HINSTANCE hinstance)
 	if (!gn_exception->InstallException(CheatEngine::NewExceptionHandler))
 		exit(0);
 	int ret = gn_exception->GN_Exception::SetHardWareBreakPoint(L"crossfire.exe", 0x455,
-	0/*this->Game::GameBase.ACE_BASE64 + GlobalBaseFuncOffset*/,
+	/*0*/this->Game::GameBase.ACE_BASE64 + GlobalBaseFuncOffset,
 	/*0*/Hitchaddress,
-	0/*RedNameTrackAddress*/,
+	/*0*/RedNameTrackAddress,
 	0/*SilentTrackAddress*/);//视角追踪需要更新，不能用
+
+	////Clear Modulehandle Header
+	//RtlZeroMemory(this->self_module_handle, 1024);
+	//Hide Dll Memory
+	if (!this->CheatEngine::driver->HideMemoryByVAD((ULONG64)this->self_module_handle, 0/*模块大小*/))
+	{
+		OutputDebugStringA("[GN]:HideMemoryByVAD() error!");
+		exit(0);
+	}
 
 }
 
@@ -60,13 +71,10 @@ void CheatEngine::Rendering()
 		}
 		else
 		{
-			////you can also be in game window callback's WM_MOUSEMOVE message use this function too.
-			////this->Draw::MoveOverlayWindow(this->CheatEngine::game_window_handle, this->Draw::GetOverlayWindowHandle());
-			////this->Draw::GetGameWindowRect();
-			//this->Draw::SetImGuiMouse();
+			this->Draw::SetImGuiMouse();
 			this->Draw::BegineDirect11();
-			//this->Draw::MenuDraw();
-			////this->Draw::MainFuncDraw();
+			this->Draw::MenuDraw();
+			this->Draw::MainFuncDraw();
 			this->Draw::EndDirect11();
 
 			////you can also be in game window callback's WM_MOUSEMOVE message use this function too.

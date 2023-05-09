@@ -49,7 +49,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -155,6 +155,9 @@
     <ClInclude Include="CheatEngine\Tools\Tools.h" />
     <ClInclude Include="CheatEngine\Tools\xorstr.h" />
     <ClInclude Include="DllMain\DllMain.h" />
+    <ClInclude Include="Driver\Driver.h" />
+    <ClInclude Include="Driver\GN-ManualMap.h" />
+    <ClInclude Include="Driver\GN-ReflectiveLoader.h" />
     <ClInclude Include="lmGui\imconfig.h" />
     <ClInclude Include="lmGui\imgui.h" />
     <ClInclude Include="lmGui\imgui_impl_dx11.h" />
@@ -164,8 +167,9 @@
     <ClInclude Include="lmGui\imstb_textedit.h" />
     <ClInclude Include="lmGui\imstb_truetype.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="ReflectiveLoader\GN-ReflectiveLoader.h" />
+    <ClInclude Include="ReflectiveLoader-User\GN-ReflectiveLoader-User.h" />
     <ClInclude Include="sdk\sdk.h" />
+    <ClInclude Include="VMProtectSDK\VMProtectSDK.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CheatEngine\CallBacks\CallBacks.cpp" />
@@ -183,10 +187,13 @@
     <ClCompile Include="lmGui\imgui_impl_win32.cpp" />
     <ClCompile Include="lmGui\imgui_tables.cpp" />
     <ClCompile Include="lmGui\imgui_widgets.cpp" />
-    <ClCompile Include="ReflectiveLoader\GN-ReflectiveLoader.cpp" />
+    <ClCompile Include="ReflectiveLoader-User\GN-ReflectiveLoader-User.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="lmGui\imgui.cppback" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="VMProtectSDK\VMProtectSDK64.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

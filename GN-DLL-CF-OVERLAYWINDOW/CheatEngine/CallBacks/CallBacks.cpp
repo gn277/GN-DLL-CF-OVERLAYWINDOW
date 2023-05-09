@@ -389,7 +389,7 @@ LONG WINAPI CheatEngine::NewExceptionHandler(PEXCEPTION_RECORD ExceptionRecord, 
 			if (ce->CheatEngine::ByPassCheck(context))
 			{
 				context->Rip = gn_exception->mdr1 + 0x07;
-				OutputDebugStringA("[GN]:Pass Base...");
+				//OutputDebugStringA("[GN]:Pass Base...");
 				return EXCEPTION_CONTINUE_EXECUTION;
 			}
 			else
@@ -402,8 +402,8 @@ LONG WINAPI CheatEngine::NewExceptionHandler(PEXCEPTION_RECORD ExceptionRecord, 
 		//绘制挂接
 		else if (ExceptionRecord->ExceptionAddress == (PVOID64)gn_exception->mdr2)
 		{
-			OutputDebugStringA("[GN]:绘制挂接...");
-			//CheatEngine::Self_Present((IDirect3DDevice9*)context->Rcx, NULL, NULL, NULL, NULL);
+			//OutputDebugStringA("[GN]:绘制挂接...");
+			CheatEngine::Self_Present((IDirect3DDevice9*)context->Rcx, NULL, NULL, NULL, NULL);
 			context->R9 = 0;
 			context->R8 = 0;
 			context->Rdx = 0;

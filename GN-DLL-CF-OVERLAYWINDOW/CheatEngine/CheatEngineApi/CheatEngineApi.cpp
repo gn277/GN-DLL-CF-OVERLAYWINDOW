@@ -36,11 +36,11 @@ CheatEngineApi::~CheatEngineApi()
 
 HWND CheatEngineApi::FindWindowA(_In_opt_ LPCSTR lpClassName, _In_opt_ LPCSTR lpWindowName)
 {
-	try
+	__try
 	{
 		return findwindowaaddress(lpClassName, lpWindowName);
 	}
-	catch (...)
+	__except(EXCEPTION_EXECUTE_HANDLER)
 	{
 		OutputDebugStringA_1Param("[GN]:%s->", __FUNCTION__);
 	}
@@ -48,11 +48,11 @@ HWND CheatEngineApi::FindWindowA(_In_opt_ LPCSTR lpClassName, _In_opt_ LPCSTR lp
 
 DWORD CheatEngineApi::GetWindowThreadProcessId(_In_ HWND hWnd, _Out_opt_ LPDWORD lpdwProcessId)
 {
-	try
+	__try
 	{
 		return getwindowthreadprocessid(hWnd, lpdwProcessId);
 	}
-	catch (...)
+	__except(EXCEPTION_EXECUTE_HANDLER)
 	{
 		OutputDebugStringA_1Param("[GN]:%s->", __FUNCTION__);
 	}
@@ -60,11 +60,11 @@ DWORD CheatEngineApi::GetWindowThreadProcessId(_In_ HWND hWnd, _Out_opt_ LPDWORD
 
 DWORD CheatEngineApi::GetCurrentProcessId()
 {
-	try
+	__try
 	{
 		return getcurrentprocessid();
 	}
-	catch (...)
+	__except(EXCEPTION_EXECUTE_HANDLER)
 	{
 		OutputDebugStringA_1Param("[GN]:%s->", __FUNCTION__);
 	}
@@ -72,11 +72,11 @@ DWORD CheatEngineApi::GetCurrentProcessId()
 
 HANDLE CheatEngineApi::GetCurrentProcess()
 {
-	try
+	__try
 	{
 		return getcurrentprocess();
 	}
-	catch (...)
+	__except(EXCEPTION_EXECUTE_HANDLER)
 	{
 		OutputDebugStringA_1Param("[GN]:%s->", __FUNCTION__);
 	}
@@ -84,11 +84,11 @@ HANDLE CheatEngineApi::GetCurrentProcess()
 
 HMODULE CheatEngineApi::GetModuleHandleA(_In_opt_ LPCSTR lpModuleName)
 {
-	try
+	__try
 	{
 		return getmodulehandlea(lpModuleName);
 	}
-	catch (...)
+	__except(EXCEPTION_EXECUTE_HANDLER)
 	{
 		OutputDebugStringA_1Param("[GN]:%s->", __FUNCTION__);
 	}

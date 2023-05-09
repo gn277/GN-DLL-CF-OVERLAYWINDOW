@@ -1,6 +1,6 @@
 #pragma once
 #include <windows.h>
-#include <Winternl.h>
+#include <Winternl.h>   
 #include <iostream>
 #include <intrin.h>
 using namespace std;  //ÃüÃû¿Õ¼ä

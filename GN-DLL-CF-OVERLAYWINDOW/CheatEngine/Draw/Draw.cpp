@@ -265,25 +265,21 @@ void Draw::MenuDraw()
 {
 	if (this->show_menu)
 	{
-		ImGui::Begin(u8"Red Bull B   Home隐藏显示");
-		static systime runtime = { NULL };
-		runtime = this->Tools::GetSystemtime();
-		ImGui::Text(u8"当前时间：%4d-%02d-%02d %02d:%02d:%02d", runtime.year, runtime.month, runtime.day, runtime.hour, runtime.min, runtime.sec);
-		ImGui::SameLine(360.0f);
-		ImGui::Text(u8"欢迎使用Red Bull"); ImGui::Separator();
+		ImGui::Begin(u8"Blue Whale | （Home隐藏显示）");
 		if (ImGui::CollapsingHeader(u8"显示专区"))
 		{
 			ImGui::Checkbox(u8"显示方框", &this->show_rectbox);													ImGui::SameLine();
 			ImGui::Checkbox(u8"显示骨骼", &this->show_bone);													ImGui::SameLine();
 			ImGui::Checkbox(u8"显示昵称", &this->show_name);													ImGui::SameLine();
-			ImGui::Checkbox(u8"显示血量", &this->show_health);													ImGui::SameLine();
 			ImGui::Checkbox(u8"显示雷包", &this->show_c4);														ImGui::Separator();
-			//
+
+			ImGui::Checkbox(u8"显示血量", &this->show_health);													ImGui::SameLine();
 			ImGui::Checkbox(u8"显示准心", &this->show_crosshair);												ImGui::SameLine();
-			ImGui::Checkbox(u8"显示扣扣", &this->show_userQQnumber);											ImGui::SameLine();
-			ImGui::Checkbox(u8"显示队友", &this->show_teamate);													ImGui::SameLine();
 			ImGui::Checkbox(u8"预瞄射线", &this->show_previewray);												ImGui::SameLine();
 			ImGui::Checkbox(u8"追踪范围", &this->show_trackrange);												ImGui::Separator();
+			////ImGui::Checkbox(u8"显示天线", &this->show_antenna);													ImGui::SameLine();
+			//ImGui::Checkbox(u8"显示扣扣", &this->show_userQQnumber);											ImGui::SameLine();
+			//ImGui::Checkbox(u8"显示队友", &this->show_teamate);													ImGui::SameLine();
 		}
 		if (ImGui::CollapsingHeader(u8"打击专区"))
 		{
@@ -425,7 +421,11 @@ void Draw::MenuDraw()
 			ImGui::Separator();
 		}
 		static systime start_time = this->Tools::GetSystemtime();
-		ImGui::Text(u8"辅助启动时间：%4d-%02d-%02d %02d:%02d:%02d", start_time.year, start_time.month, start_time.day, start_time.hour, start_time.min, start_time.sec); ImGui::SameLine();
+		ImGui::Text(u8"辅助启动时间：%4d-%02d-%02d %02d:%02d:%02d", start_time.year, start_time.month, start_time.day, start_time.hour, start_time.min, start_time.sec);
+		ImGui::SameLine(260);
+		static systime runtime = { NULL };
+		runtime = this->Tools::GetSystemtime();
+		ImGui::Text(u8"当前时间：%4d-%02d-%02d %02d:%02d:%02d", runtime.year, runtime.month, runtime.day, runtime.hour, runtime.min, runtime.sec); ImGui::Separator();
 		ImGui::Text(u8"绘制速度: %.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::End();
 	}

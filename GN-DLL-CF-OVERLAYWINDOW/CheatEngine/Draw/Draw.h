@@ -75,6 +75,7 @@ public:
 	bool show_crosshair = false;				//显示准心
 	bool show_bone = false;						//显示骨骼
 	bool show_userQQnumber = false;				//显示扣扣
+	bool show_antenna = false;;					//显示天线
 	bool show_teamate = false;					//显示队友
 	bool show_previewray = false;				//预瞄射线
 	bool show_trackrange = false;				//追踪范围
